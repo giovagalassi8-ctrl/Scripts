@@ -1,29 +1,28 @@
 #!/bin/bash
 
-# Define the output filename as requested
+# Define the output filename
 output_file="Likelyhood.txt"
 
-# Initialize the output file (clears it if it already exists)
+# Initialize/Clear the output file
 > "$output_file"
 
-echo "Starting extraction of first lines from Base_results.txt..."
+echo "Starting extraction. Looking for Base_results.txt or Gamma_results.txt..."
 
-# Find all instances of Base_results.txt in subdirectories
-# We use 'sort' to ensure the output order is consistent (e.g., 00_1L before 00_2L)
-find . -name "Base_results.txt" | sort | while read -r filepath; do
+# Find files matching either name.
+# We use \( ... -o ... \) to group the conditions (OR logic).
+find . -type f \( -name "Base_results.txt" -o -name "Gamma_results.txt" \) | sort | while read -r filepath; do
 
-    # Extract the directory path relative to the current folder
-    # Example: ./00_1L/1K/1N/Base_results.txt -> ./00_1L/1K/1N
+    # Extract the directory path (e.g., ./00_1L/1K/1N)
     dir_path=$(dirname "$filepath")
 
-    # Remove the leading "./" for a cleaner output format
+    # Clean the path by removing the leading "./"
     clean_path=${dir_path#./}
 
-    # Extract the very first line of the file
+    # Extract the first line of the found file
     first_line=$(head -n 1 "$filepath")
 
-    # Write the path and the extracted line to the output file
-    # Using a tab (\t) to separate the path from the value for readability
+    # Write the directory path and the extracted line to the output file
+    # We use a tab (\t) as separator
     echo -e "${clean_path}\t${first_line}" >> "$output_file"
 
 done
