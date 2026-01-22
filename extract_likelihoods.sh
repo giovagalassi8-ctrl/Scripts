@@ -1,25 +1,31 @@
 #!/bin/bash
 
-output="Likelyhoood.txt"
+# Define the output filename as requested
+output_file="Likelyhood.txt"
 
-# Svuota il file di output se esiste
-> "$output"
+# Initialize the output file (clears it if it already exists)
+> "$output_file"
 
-# Cerca tutti i Base_results.txt
-find . -type f -name "Base_results.txt" | while read -r file; do
+echo "Starting extraction of first lines from Base_results.txt..."
 
-    # Percorso relativo senza ./ iniziale
-    rel_path="${file#./}"
+# Find all instances of Base_results.txt in subdirectories
+# We use 'sort' to ensure the output order is consistent (e.g., 00_1L before 00_2L)
+find . -name "Base_results.txt" | sort | while read -r filepath; do
 
-    # Etichetta (00_1L/1K/2N)
-    label=$(dirname "$rel_path")
+    # Extract the directory path relative to the current folder
+    # Example: ./00_1L/1K/1N/Base_results.txt -> ./00_1L/1K/1N
+    dir_path=$(dirname "$filepath")
 
-    # Estrae SOLO la prima riga del file
-    line=$(head -n 1 "$file")
+    # Remove the leading "./" for a cleaner output format
+    clean_path=${dir_path#./}
 
-    # Scrive nel file finale
-    if [[ -n "$line" ]]; then
-        echo -e "${label}\t${line}" >> "$output"
-    fi
+    # Extract the very first line of the file
+    first_line=$(head -n 1 "$filepath")
+
+    # Write the path and the extracted line to the output file
+    # Using a tab (\t) to separate the path from the value for readability
+    echo -e "${clean_path}\t${first_line}" >> "$output_file"
 
 done
+
+echo "Process completed. Data saved to $output_file"
