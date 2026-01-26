@@ -17,7 +17,8 @@ TREE_FILE="$2"         # The target tree file where labels will be added.
 
 # Generate output filename
 # We take the full input filename ($TREE_FILE) and append the suffix directly.
-OUTPUT_FILE="${TREE_FILE}_annotated.treefile"
+BASE_NAME="${TREE_FILE%.*}"
+OUTPUT_FILE="${BASE_NAME}_annotated.treefile"
 
 echo "Starting annotation process..."
 echo "  > Reading mapping from: $MAPPING_FILE"
