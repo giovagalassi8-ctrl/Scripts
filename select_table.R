@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 
-# Description: Parses a CSV file containing multiple stacked tables (separated
-#              by empty lines), allows the user to interactively select one,
-#              and loads/saves the selected table.
+# Description: Parses a CSV file containing multiple stacked tables (separated by empty lines), allows the user to interactively select one, and loads/saves the selected table.
 
-# Usage:       Rscript select_table.R [filename]
-#              In RStudio: source("select_table.R")
+# Usage:       
+# Rscript select_table.R [filename]
+# In RStudio: source("select_table.R")
+
 
 # --- Configuration ---
 # Default filename to look for if no argument is provided
