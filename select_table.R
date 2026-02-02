@@ -1,10 +1,10 @@
 #!/usr/bin/env Rscript
 
-# Description: Parses a CSV file containing multiple stacked tables (separated by empty lines), allows the user to interactively select one, and loads/saves the selected table.
+# Description: Parses a CSV file containing multiple tables. It detects tables stacked vertically (separated by empty lines) AND tables placedside-by-side (separated by empty columns). Allows interactive selection and saving.
 
 # Usage:       
-# Rscript select_table.R [filename]
-# In RStudio: source("select_table.R")
+# [bash] Rscript select_table.R [filename]
+# [RStudio] source("select_table.R")
 
 
 # --- Configuration ---
@@ -12,134 +12,202 @@
 DEFAULT_FILENAME <- "02_SPIRALIA_DATASET.xlsx - matrices.csv"     # Change file name here
 
 # --- Functions ---
-
 get_user_input <- function(prompt_text) {
-  # Handles input reading for both interactive session (RStudio) and non-interactive (Terminal)
   if (interactive()) {
     return(readline(prompt = prompt_text))
   } else {
     cat(prompt_text)
-    # Read from stdin
     con <- file("stdin")
     on.exit(close(con))
     return(readLines(con, n = 1))
   }
 }
 
-parse_blocks <- function(lines) {
-  # Identifies start and end indices of data blocks separated by empty lines
-  # Returns a list of lists with 'start', 'end', and 'name'
+# Checks if a vector is "empty" (all NAs or empty strings)
+is_column_empty <- function(x) {
+  # Treat NA and empty strings as empty
+  x <- as.character(x)
+  all(is.na(x) | trimws(x) == "")
+}
+
+extract_subtables <- function(lines, block_start, block_end) {
+  # 1. Create a raw dataframe from the lines to analyze columns
+  # We use header=FALSE to treat the first row as data for detecting empty cols
+  txt_conn <- textConnection(lines[block_start:block_end])
+  raw_df <- tryCatch({
+    read.csv(txt_conn, header = FALSE, stringsAsFactors = FALSE, colClasses = "character")
+  }, error = function(e) return(NULL))
+  close(txt_conn)
   
-  # Regex for empty or comma-only lines
+  if (is.null(raw_df) || ncol(raw_df) == 0) return(list())
+  
+  # 2. Identify empty columns
+  # Returns a boolean vector: TRUE if column is empty, FALSE contains data
+  empty_cols_mask <- sapply(raw_df, is_column_empty)
+  
+  # 3. Identify ranges of consecutive NON-empty columns
+  # We use Run Length Encoding (rle) on the inverse mask
+  has_data <- !empty_cols_mask
+  rle_res <- rle(has_data)
+  
+  subtables <- list()
+  current_col_idx <- 1
+  
+  for (i in seq_along(rle_res$lengths)) {
+    is_data_chunk <- rle_res$values[i]
+    chunk_len <- rle_res$lengths[i]
+    
+    if (is_data_chunk) {
+      # This is a valid table block
+      col_start <- current_col_idx
+      col_end <- current_col_idx + chunk_len - 1
+      
+      # Extract the subset
+      sub_df <- raw_df[, col_start:col_end, drop = FALSE]
+      
+      # Try to extract a name from the top-left cell
+      name_candidate <- sub_df[1, 1]
+      if (is.na(name_candidate) || name_candidate == "") name_candidate <- "Unnamed Table"
+      
+      subtables[[length(subtables) + 1]] <- list(
+        name = name_candidate,
+        data = sub_df,
+        orig_rows = paste0(block_start, "-", block_end),
+        orig_cols = paste0(col_start, "-", col_end)
+      )
+    }
+    
+    current_col_idx <- current_col_idx + chunk_len
+  }
+  
+  return(subtables)
+}
+
+parse_all_tables <- function(lines) {
+  # 1. Identify Vertical Blocks (empty lines)
   is_separator <- grepl("^,*\\s*$", lines)
   
-  blocks <- list()
+  vertical_blocks <- list()
   current_start <- NA
   
   for (i in seq_along(lines)) {
     if (!is_separator[i]) {
-      if (is.na(current_start)) {
-        current_start <- i
-      }
+      if (is.na(current_start)) current_start <- i
     } else {
       if (!is.na(current_start)) {
-        blocks[[length(blocks) + 1]] <- c(start = current_start, end = i - 1)
+        vertical_blocks[[length(vertical_blocks) + 1]] <- c(start = current_start, end = i - 1)
         current_start <- NA
       }
     }
   }
-  # Capture the last block if file doesn't end with a newline
   if (!is.na(current_start)) {
-    blocks[[length(blocks) + 1]] <- c(start = current_start, end = length(lines))
+    vertical_blocks[[length(vertical_blocks) + 1]] <- c(start = current_start, end = length(lines))
   }
   
-  return(blocks)
-}
-
-extract_block_name <- function(first_line) {
-  # Extracts a potential name from the first cell of the block
-  parts <- strsplit(first_line, ",")[[1]]
-  # Clean up quotes
-  parts <- gsub('"', '', parts)
-  # Find first non-empty part
-  name <- parts[parts != ""][1]
-  if (is.na(name) || name == "") return("Unnamed Table")
-  return(name)
+  # 2. Process each vertical block to find Horizontal splits
+  all_tables <- list()
+  
+  for (v_block in vertical_blocks) {
+    found_tables <- extract_subtables(lines, v_block['start'], v_block['end'])
+    all_tables <- c(all_tables, found_tables)
+  }
+  
+  return(all_tables)
 }
 
 # --- Main Execution ---
-
-# Determine file path
 args <- commandArgs(trailingOnly = TRUE)
 file_path <- if (length(args) > 0) args[1] else DEFAULT_FILENAME
 
-# Check if file exists
-if (!file.exists(file_path)) {
-  stop(paste("Error: File not found:", file_path))
-}
+if (!file.exists(file_path)) stop(paste("Error: File not found:", file_path))
 
 cat(paste("Reading file:", file_path, "...\n"))
 all_lines <- readLines(file_path, warn = FALSE)
 
-# Parse blocks
-blocks <- parse_blocks(all_lines)
+# Detect all tables (vertical + horizontal)
+tables <- parse_all_tables(all_lines)
 
-if (length(blocks) == 0) {
+if (length(tables) == 0) {
   stop("No tables found in the file.")
 }
 
-# Extract names for menu
-block_names <- sapply(blocks, function(b) extract_block_name(all_lines[b['start']]))
-
-# Select table
+# Menu Selection
 selected_index <- 1
 
-if (length(blocks) > 1) {
-  cat("\n--- Multiple Tables Found ---\n")
-  for (i in seq_along(block_names)) {
-    cat(sprintf("[%d] %s (Rows %d-%d)\n", i, block_names[i], blocks[[i]]['start'], blocks[[i]]['end']))
+if (length(tables) > 1) {
+  cat("\n--- Tables Detected ---\n")
+  for (i in seq_along(tables)) {
+    tbl <- tables[[i]]
+    cat(sprintf("[%d] %s (Rows: %s, Cols: %s)\n", 
+                i, tbl$name, tbl$orig_rows, tbl$orig_cols))
   }
   
   repeat {
-    input <- get_user_input("\nEnter the number of the table to process: ")
+    input <- get_user_input("\nEnter table number: ")
     choice <- as.integer(input)
     
-    if (!is.na(choice) && choice >= 1 && choice <= length(blocks)) {
+    if (!is.na(choice) && choice >= 1 && choice <= length(tables)) {
       selected_index <- choice
       break
     } else {
-      cat("Invalid selection. Please try again.\n")
+      cat("Invalid selection.\n")
     }
   }
 } else {
-  cat("\nOnly one table found. Selecting automatically.\n")
+  cat("\nOnly one table found. Auto-selecting.\n")
 }
 
-# Process selected block
-sel_block <- blocks[[selected_index]]
-cat(paste("\nSelected:", block_names[selected_index], "\n"))
+# Get selected table
+sel_table_obj <- tables[[selected_index]]
+final_df <- sel_table_obj$data
 
-# Extract lines for the selected table
-table_lines <- all_lines[sel_block['start']:sel_block['end']]
+cat(paste("\nSelected:", sel_table_obj$name, "\n"))
 
-# Attempt to load into DataFrame
-# We assume the table format allows for CSV parsing. 
-# Note: Complex headers (multi-row) might require manual adjustment later.
-df <- read.csv(text = table_lines, header = TRUE, stringsAsFactors = FALSE, check.names = FALSE)
+# --- Header Adjustment ---
+# Since we read with header=FALSE to detect blocks, the first row is now row 1 of data.
+# Often in these stacked files, the first row is the 'Title' (e.g. "MS90") and 
+# the SECOND row is the actual header (e.g. "model, MM, LG...").
+# Let's ask the user or use a heuristic. 
+# Heuristic: If row 1 has only 1 non-empty cell and row 2 has many, row 2 is likely header.
 
-# Show preview
-cat("\n--- Data Preview (Top 5 rows) ---\n")
-print(head(df, 5))
-cat(sprintf("\nDimensions: %d rows x %d columns\n", nrow(df), ncol(df)))
+cat("--- Processing Headers ---\n")
+# Simple default: assume row 2 is header if row 1 looks like a title (mostly empty)
+# Otherwise assume row 1 is header.
+non_empty_r1 <- sum(final_df[1,] != "")
+non_empty_r2 <- sum(final_df[2,] != "")
 
-# Option to save to file (useful for Bash workflow)
-save_prompt <- get_user_input("\nDo you want to save this table to a new CSV file? [y/N]: ")
+use_row2_as_header <- FALSE
+if (nrow(final_df) > 1) {
+  # If row 1 has significantly fewer filled cells than row 2, it's likely a title
+  if (non_empty_r1 < (non_empty_r2 / 2) || non_empty_r1 == 1) {
+    use_row2_as_header <- TRUE
+  }
+}
+
+if (use_row2_as_header) {
+  cat("Detected Title in Row 1. Using Row 2 as Header.\n")
+  colnames(final_df) <- final_df[2, ]
+  final_df <- final_df[-c(1, 2), ] # Remove title and header rows
+} else {
+  cat("Using Row 1 as Header.\n")
+  colnames(final_df) <- final_df[1, ]
+  final_df <- final_df[-1, ]
+}
+
+# Reset row names
+rownames(final_df) <- NULL
+
+# Preview
+cat("\n--- Data Preview ---\n")
+print(head(final_df, 5))
+
+# Export Option
+save_prompt <- get_user_input("\nSave to CSV? [y/N]: ")
 if (tolower(substr(save_prompt, 1, 1)) == "y") {
-  out_name <- paste0("extracted_", gsub("[^a-zA-Z0-9]", "_", block_names[selected_index]), ".csv")
-  write.csv(df, out_name, row.names = FALSE)
+  clean_name <- gsub("[^a-zA-Z0-9]", "_", sel_table_obj$name)
+  out_name <- paste0("extracted_", clean_name, ".csv")
+  write.csv(final_df, out_name, row.names = FALSE)
   cat(paste("Saved to:", out_name, "\n"))
 }
 
-# If running in RStudio/interactive mode, return the dataframe invisibly so it can be assigned
-# e.g., my_data <- source("select_table.R")$value
-invisible(df)
+invisible(final_df)
