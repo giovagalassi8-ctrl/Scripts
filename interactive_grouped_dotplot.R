@@ -106,8 +106,8 @@ plot_main <- ggplot(
   )
 ) +
 geom_line(
-  aes(group = Group)
-  linetype = "dashed"
+  aes(group = Group),
+  linetype = "dashed",
   color = "black"
 ) +
   geom_point(
@@ -117,7 +117,7 @@ geom_line(
   scale_x_continuous(           # Forces the x-axis to always start from zero.
     limits = c(0, NA),
     expand = expansion(mult = c(0, 0.05))
-  )                                
+  ) +                               
   theme_minimal() +               # Applies a clean graphic theme with a white background and a subtle grid.
   labs(                      # Sets the axis labels.
     title = paste("Comparison based on", selected_column),
