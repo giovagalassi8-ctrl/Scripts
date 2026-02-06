@@ -114,16 +114,7 @@ plot_main <- ggplot(
     expand = expansion(mult = c(0, 0.05))
   )                                
  
- theme_minimal(
-  base_size = 11,
-  base_family = "",
-  header_family = NULL,
-  base_line_size = base_size/22,
-  base_rect_size = base_size/22,
-  ink = "black",
-  paper = "white",
-  accent = "#3366FF"
-)
+ theme_minimal() +
 
   labs(                      # Sets the axis labels.
     title = paste("Comparison based on", selected_column),
