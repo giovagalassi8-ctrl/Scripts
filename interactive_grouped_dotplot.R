@@ -105,6 +105,11 @@ plot_main <- ggplot(
     color = ColorGroup     # Points will be colored based on the object type.
   )
 ) +
+geom_line(
+  aes(group = Group)
+  linetype = "dashed"
+  color = "black"
+) +
   geom_point(
     size = 4,    # Change this value to modify the point size in the plot.
     shape = 16   # Change this value to modify the point shape in the plot.
@@ -113,7 +118,7 @@ plot_main <- ggplot(
     limits = c(0, NA),
     expand = expansion(mult = c(0, 0.05))
   )                                
-  theme_bw() +               # Applies a clean graphic theme with a white background and a subtle grid.
+  theme_minimal() +               # Applies a clean graphic theme with a white background and a subtle grid.
   labs(                      # Sets the axis labels.
     title = paste("Comparison based on", selected_column),
     x = selected_column,
