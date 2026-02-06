@@ -15,10 +15,10 @@
 #
 # USAGE:
 #   RStudio:
-#     source("generic_interactive_plot.R")
+#     source("interactive_grouped_dotplot.R")
 #
 #   Terminal:
-#     Rscript generic_interactive_plot.R
+#     Rscript interactive_grouped_dotplot.R
 #
 # REQUIRED PACKAGES:
 #   install.packages(c("tidyverse"))
@@ -30,7 +30,7 @@ library(tidyverse)
 # 1) INPUT FILE
 # --------------------------------------------------
 
-input_file <- "MS90_all_matrix_stats.txt"
+input_file <- "MS90_all_matrix_stats.txt"    # Change file name if necessary
 
 if (!file.exists(input_file)) {
   stop(paste("ERROR: File", input_file, "not found."))
