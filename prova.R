@@ -1,15 +1,38 @@
 #!/usr/bin/env Rscript
 
-# --- CONFIGURATION ---
-# Input file
-INPUT_FILE  <- "extracted_Unnamed_Table.csv"
+# ==============================================================================
+# Script Name: heatmap_custom.R
+# Description: Generates a custom heatmap with numeric values inside cells.
+#              - Supports multi-row headers (merges them).
+#              - Custom color scale: Red (0) -> White (50) -> Blue (100).
+#              - Works in RStudio and Bash.
+# Usage:       Rscript heatmap_custom.R [filename]
+# ==============================================================================
 
-# Number of rows to merge for the header (e.g., 3 rows become one label)
+# IMPORTANT: PRELIMINARY CHECK OF THE .CSV FILE
+# Before running this script, it is recommended to open the .csv file and 
+# carefully check the header rows (the first rows defining the columns).
+#
+# Sometimes, when converting from Excel to CSV, cells that were "merged" in Excel 
+# become one filled cell followed by empty cells in the CSV.
+# If there are unwanted white/empty cells in the header rows, the script might 
+# generate incomplete labels.
+# -> FILL THESE CELLS with the correct text before launching the script so that 
+#    every column has a complete and correct label in the plot.
+
+# --- CONFIGURATION (CHANGE THESE VALUES AS NEEDED) ---
+
+# Input file
+INPUT_FILE  <- "extracted_Table.csv"
+
+# HEADER ROWS: Number of rows at the top to use as column headers.
+# Change this to 1 if you only have one header line.
+# Change this to 3 (default) to merge the top 3 rows into the column name.
 HEADER_ROWS <- 3 
 
 # VISUAL SETTINGS
-# Increase GRID_WIDTH to make squares smaller and margins larger (Try 3, 5, or 10)
-GRID_WIDTH  <- 5  
+GRID_WIDTH  <- 15   # Change square shape (increase the number to make square smaller and margins larger)
+
 TEXT_SIZE   <- 0.7
 
 # Color scale (Red=0, White=50, Blue=100)
