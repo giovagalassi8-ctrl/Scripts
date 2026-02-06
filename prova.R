@@ -33,7 +33,7 @@ HEADER_ROWS <- 3
 # VISUAL SETTINGS
 GRID_WIDTH  <- 15   # Change square shape (increase the number to make square smaller and margins larger)
 
-TEXT_SIZE   <- 0.7
+TEXT_SIZE   <- 0.7  # Change inbox text dimension
 
 # Color scale (Red=0, White=50, Blue=100)
 MIN_VAL <- 0
@@ -118,7 +118,7 @@ draw_plot <- function() {
   # -----------------------------------------------------------------
   
   # Add Labels
-  axis(1, at = 1:n_cols, labels = colnames(mat_flipped), las = 2, tick = FALSE, cex.axis = 0.7)
+  axis(1, at = 1:n_cols, labels = colnames(mat_flipped), las = 1, tick = FALSE, cex.axis = 0.7)
   axis(2, at = 1:n_rows, labels = rownames(mat_flipped), las = 2, tick = FALSE, cex.axis = 0.8)
   
   # Add Numbers (plotted ON TOP of the white grid)
