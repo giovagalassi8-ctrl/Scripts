@@ -1,0 +1,15 @@
+#!/bin/bash
+
+GROUP_FILENAME="$1"   # for example Mollusca.txt
+OUTPUT_NAME="{GROUP_FILENAME.*}_monophyly.txt"
+
+for main_dir in 0[1-7]_*; do   
+    for sub_dir in "$main_dir"/0[0-9]_*; do
+                tree_file=$(find "$sub_dir" -maxdepth 1 -type f -name "*.treefile" ! -name "*_annotated.treefile" | head -n 1)
+                list_of_taxa=$GROUP_FILENAME;
+                phykit monophyly_check "$tree_file" "$list_of_taxa"; done;
+                done 
+              
+                
+                
+
