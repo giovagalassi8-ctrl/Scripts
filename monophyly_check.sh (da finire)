@@ -72,10 +72,17 @@ for main_dir in 0[1-7]_*; do
         # --- 4. FIND THE CORRECT TREEFILE ---
         # We look for a file ending in .treefile BUT NOT _with_clade.treefile
         # 'find' is used with '! -name' to exclude the annotated file.
-        tree_file=$(find "$sub_dir" -maxdepth 1 -type f -name "*.treefile" ! -name "*_with_clade.treefile" | head -n 1)      # 'head -n 1' ensures we only pick one file if multiple matches exist.
+        tree_file=$(find "$sub_dir" -maxdepth 1 -type f -name "*.treefile" ! -name "*_with_clade.treefile" \
+                    | awk '{ print length, $0 }' \
+                    | sort -n \
+                    | tail -n 1 \
+                    | cut -d" " -f2-)
 
-        # Check if a valid tree file was found in this folder
         if [ -n "$tree_file" ]; then
+             # ... (resto dello script identico a prima: calcolo match_count, if/else, phykit) ...
+             
+             # Per sicurezza, stampiamo quale file ha scelto così controlli
+             # echo "DEBUG: Ho scelto il file: $tree_file"
             
             # --- 5. PREPARE OUTPUT FORMAT ---
             # Extract the filename
