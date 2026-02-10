@@ -53,7 +53,7 @@ for main_dir in 0[1-7]_*; do
     [ -d "$main_dir" ] || continue
 
     # Iterate through sub-directories (01_ to 09_)
-    for sub_dir in "$main_dir"/0[0-9]_*; do
+    for sub_dir in "$main_dir"/0[1-9]_*; do
         
         # Skip if it's not a directory
         [ -d "$sub_dir" ] || continue
