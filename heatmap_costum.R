@@ -1,13 +1,8 @@
 #!/usr/bin/env Rscript
 
-# ==============================================================================
-# Script Name: csv_to_heatmap.R
-# Description: Generates a custom heatmap with numeric values inside cells.
-#              - Supports multi-row headers (merges them).
-#              - Custom color scale: Red (0) -> White (50) -> Blue (100).
-#              - Works in RStudio and Bash.
-# Usage:       Rscript heatmap_custom.R [filename]
-# ==============================================================================
+# Description: This script is designed to visualize data from a CSV file as an annotated heatmap. It handles complex layouts by merging multi-row headers into clear column labels and applies a custom Red-White-Blue color gradient (0-50-100) to represent intensity.
+
+# Usage: Rscript csv_to_heatmap.R [filename]
 
 # IMPORTANT: PRELIMINARY CHECK OF THE .CSV FILE
 # Before running this script, it is recommended to open the .csv file and 
