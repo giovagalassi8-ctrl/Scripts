@@ -70,7 +70,7 @@ for main_dir in 0[1-7]_*; do
         [ -d "$sub_dir" ] || continue
 
         # --- 4. FIND THE CORRECT TREEFILE ---
-        # We look for a file ending in .treefile BUT NOT _with_clade.treefile
+        # We look for a file ending in .treefile BUT NOT _with_clade.treefile (change the -name section in the script if necessary)
         # 'find' is used with '! -name' to exclude the annotated file.
         tree_file=$(find "$sub_dir" -maxdepth 1 -type f -name "*.treefile" ! -name "*_with_clade.treefile" | head -n 1)      # 'head -n 1' ensures we only pick one file if multiple matches exist.
 
