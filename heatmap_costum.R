@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script Name: heatmap_custom.R
+# Script Name: csv_to_heatmap.R
 # Description: Generates a custom heatmap with numeric values inside cells.
 #              - Supports multi-row headers (merges them).
 #              - Custom color scale: Red (0) -> White (50) -> Blue (100).
