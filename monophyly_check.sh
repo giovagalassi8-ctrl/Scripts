@@ -1,11 +1,22 @@
 #!/bin/bash
 
 # DESCRIPTION: This script automates the execution of phykit monophyly_check across multiple phylogenetic tree files organized in a nested folder structure. It processes all .treefile files (excluding *_with_clade.treefile) found in subdirectories and consolidates the results into a single output file. 
-
+#
 # OUTPUT: The results are aggregated into a single output file with the following format:
 #         Tree_Name_Without_Extension
 #         <phykit_output_result>
-
+#
+# Folder Structure Expected:
+#   01_/
+#     01_/*.treefile
+#     02_/*.treefile
+#     ...
+#   02_/
+#     01_/*.treefile
+#     ...
+#   ...
+#   07_/
+#
 # USAGE:
 #   ./run_monophyly_scan.sh <group_file.txt>
 
@@ -46,13 +57,13 @@ echo "  > Output File: $OUTPUT_FILE"
 echo "------------------------------------------------------------------"
 
 # --- 3. MAIN LOOP ---
-# Iterate through main directories (01_ to 07_)
+# Iterate through main directories (01_ to 07_). Change folder number if necessary.
 for main_dir in 0[1-7]_*; do
     
     # Skip if it's not a directory
     [ -d "$main_dir" ] || continue
 
-    # Iterate through sub-directories (01_ to 09_)
+    # Iterate through sub-directories (01_ to 09_). Change folder number if necessary
     for sub_dir in "$main_dir"/0[1-9]_*; do
         
         # Skip if it's not a directory
