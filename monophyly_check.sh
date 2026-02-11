@@ -24,11 +24,7 @@
 # --- 1. ARGUMENT CHECKING ---
 # We ensure the user provided exactly one argument (the group file).
 if [ "$#" -ne 1 ]; then
-    echo "------------------------------------------------------------------"
-    echo "ERROR: Missing arguments."
     echo "Usage: $0 <group_file.txt>"
-    echo "Example: $0 Mollusca.txt"
-    echo "------------------------------------------------------------------"
     exit 1
 fi
 
@@ -72,7 +68,7 @@ for main_dir in 0[1-7]_*; do
         # --- 4. FIND THE CORRECT TREEFILE ---
         # We look for a file ending in .treefile BUT NOT _with_clade.treefile (change the -name section in the script if necessary)
         # 'find' is used with '! -name' to exclude the annotated file.
-        tree_file=$(find "$sub_dir" -maxdepth 1 -type f -name "*.treefile" ! -name "*_with_clade.treefile" | head -n 1)      # 'head -n 1' ensures we only pick one file if multiple matches exist.
+        tree_file=$(find "$sub_dir" -maxdepth 1 -type f -name "*.treefile" ! -name "*_clade.treefile" | head -n 1)      # 'head -n 1' ensures we only pick one file if multiple matches exist.
 
         # Check if a valid tree file was found in this folder
         if [ -n "$tree_file" ]; then
@@ -87,20 +83,53 @@ for main_dir in 0[1-7]_*; do
             # Write the clean name to the output file
             echo "$clean_name" >> "$OUTPUT_FILE"
 
-            # --- 6. RUN PHYKIT ---
-            # Execute the analysis and append the result to the next line of the output file
-            phykit monophyly_check "$tree_file" "$GROUP_FILE_PATH" >> "$OUTPUT_FILE"
             
-            # Print a small progress indicator to the screen
-            echo "[PROCESSED] $clean_name"
+            # --- 6. DYNAMIC INTERSECTION ---
+            
+            # Define a unique temp filename for this iteration
+            TEMP_LIST="temp_subset_${clean_name}.txt"
+            
+            # 1. sed 's/\r$//': Sanitize input file (remove Windows carriage returns)
+            # 2. grep -F -o -f ... : 
+            #    -F: Use fixed strings (not regex) from the group file.
+            #    -f: Read patterns from the sanitized group file.
+            #    -o: Output ONLY the matching part found in the tree file.
+            # This effectively extracts the species names that are present in the tree.
+            
+            grep -F -o -f <(sed 's/\r$//' "$GROUP_FILE_PATH") "$tree_file" | sort | uniq > "$TEMP_LIST"
+            
+            # Count how many valid taxa were found
+            MATCH_COUNT=$(wc -l < "$TEMP_LIST")
+            
+            # --- 7. RUN PHYKIT ---
+            # At least 2 taxa are necessary to check for monophyly
+            if [ "$MATCH_COUNT" -ge 2 ]; then
+                
+                # Execute Phykit using the TEMPORARY list (subset), not the master list.
+                # 2> /dev/null hides stderr noise.
+                phykit monophyly_check "$tree_file" "$TEMP_LIST" 2> /dev/null >> "$OUTPUT_FILE"
+                
+                echo "[PROCESSED] $clean_name (Used $MATCH_COUNT taxa)"
+                
+            elif [ "$MATCH_COUNT" -eq 1 ]; then
+                # Only 1 species found -> Cannot calculate monophyly, but not an error.
+                echo "Single_Taxon_Present" >> "$OUTPUT_FILE"
+                echo "[SKIPPED]   $clean_name (Only 1 taxon found)"
+                
+            else
+                # 0 species found
+                echo "No_Taxa_Found" >> "$OUTPUT_FILE"
+                echo "[SKIPPED]   $clean_name (0 taxa found)"
+            fi
+            
+            # CLEANUP: Remove the temporary file for this loop
+            rm "$TEMP_LIST" 2>/dev/null
 
         else
-            # Warning if no suitable tree file is found in a subdirectory
             echo "[WARNING] No valid .treefile found in $sub_dir"
         fi
-
     done
 done
 
 echo "------------------------------------------------------------------"
-echo "Analysis complete. Results saved in: $OUTPUT_FILE"
+echo "Done. Results saved in: $OUTPUT_FILE"
