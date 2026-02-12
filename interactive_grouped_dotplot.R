@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 ############################################################
 # This script reads a generic tab-delimited text file containing summary statistics.
 #   
