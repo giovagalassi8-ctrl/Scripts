@@ -26,14 +26,14 @@ echo "  > Reading tree from:    $TREE_FILE"
 
 # Start awk processing
 awk -v OFS="" '
-    # --- PHASE 1: Load Mapping Data ---
+    # --- Load Mapping Data ---
     NR==FNR {
         # Extracts the first 3 letters of the Clade name to create a suffix.
         clade3[$1] = substr($2, 1, 3)
         next 
     }
 
-    # --- PHASE 2: Process Tree File ---
+    # --- Process Tree File ---
     # Scans the provided tree file and replaces every known species name with "SpeciesName_Suffix".
     {
         for (species in clade3) {
