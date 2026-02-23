@@ -56,7 +56,6 @@ data_parsed <- data_raw %>%
     ColorGroup = sub(".*_[^_]+_[^_]+_([^_]+)$", "\\1", Object_clean)
   )
 
-
 # --- INTERACTIVE COLUMN SELECTION ---
 
 numeric_cols <- names(data_parsed)[sapply(data_parsed, is.numeric)]
