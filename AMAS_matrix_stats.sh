@@ -2,6 +2,9 @@
 
 #This script recursively finds all concatenated_*.out files, copies them into the 11_matrix_stats directory, and runs AMAS.py to generate summary statistics for each file, producing one summary output per concatenated matrix.
 
+# USAGE:
+# [bash] ./AMAS_matrix_stats.sh
+
 # Output directory where copied files and AMAS results will be stored
 OUTDIR="11_matrix_stats"
 
