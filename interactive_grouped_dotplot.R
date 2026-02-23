@@ -26,9 +26,7 @@
 
 library(tidyverse)
 
-# --------------------------------------------------
-# 1) INPUT FILE
-# --------------------------------------------------
+# --- INPUT FILE ---
 
 input_file <- "MS90_all_matrix_stats.txt"    # Change file name if necessary
 
@@ -36,18 +34,14 @@ if (!file.exists(input_file)) {
   stop(paste("ERROR: File", input_file, "not found."))
 }
 
-# --------------------------------------------------
-# 2) READ DATA
-# --------------------------------------------------
+# --- READ DATA ---
 
 data_raw <- read_table(input_file)
 
 # Rename first column as Object
 colnames(data_raw)[1] <- "Object"
 
-# --------------------------------------------------
-# 3) PARSE OBJECT NAMES
-# --------------------------------------------------
+# --- PARSE OBJECT NAMES ---
 # Expected structure (example):
 #   concatenated_MS90_g80_allgenes.out
 
@@ -62,9 +56,8 @@ data_parsed <- data_raw %>%
     ColorGroup = sub(".*_[^_]+_[^_]+_([^_]+)$", "\\1", Object_clean)
   )
 
-# --------------------------------------------------
-# 4) INTERACTIVE COLUMN SELECTION
-# --------------------------------------------------
+
+# --- INTERACTIVE COLUMN SELECTION ---
 
 numeric_cols <- names(data_parsed)[sapply(data_parsed, is.numeric)]
 
@@ -84,18 +77,13 @@ selected_column <- numeric_cols[col_choice]
 
 cat("\nSelected column:", selected_column, "\n")
 
-# --------------------------------------------------
-# 5) PREPARE DATA FOR PLOTTING
-# --------------------------------------------------
-
+# --- PREPARE DATA FOR PLOTTING ---
 # Data is being processed for visualization purposes.
 
 plot_data <- data_parsed %>%
   select(Group, ColorGroup, Value = all_of(selected_column))
 
-# --------------------------------------------------
-# 6) CREATE PLOT
-# --------------------------------------------------
+# --- CREATE PLOT ---
 
 plot_main <- ggplot(
   plot_data,
@@ -128,9 +116,7 @@ geom_line(
 
 print(plot_main)
 
-# --------------------------------------------------
-# 7) ASK WHETHER TO SAVE
-# --------------------------------------------------
+# --- ASK WHETHER TO SAVE ---
 
 cat("\nDo you want to save the plot? (y/n): ")
 save_choice <- tolower(readLines(con = stdin(), n = 1))
