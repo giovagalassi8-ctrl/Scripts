@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 
-# Description: Parses a CSV file containing multiple tables. It detects tables stacked vertically (separated by empty lines) AND tables placedside-by-side (separated by empty columns). Allows interactive selection and saving.
+# This script parses a CSV file containing multiple tables. It detects tables stacked vertically (separated by empty lines) and tables placedside-by-side (separated by empty columns). 
+# Allows interactive selection and saving.
 
 # Usage:       
 # [bash] Rscript select_table.R [filename]
