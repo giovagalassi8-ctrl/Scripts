@@ -2,7 +2,8 @@
 
 # This script annotates a phylogenetic tree file by appending a clade suffix to the species names, based on a provided mapping table.
 
-# USAGE: ./annotate_tree.sh <mapping_table.tsv> <tree_file>
+# USAGE: 
+# [bash] ./annotate_tree.sh <mapping_table.tsv> <tree_file>
 
 # Check if the correct number of arguments is provided
 if [ "$#" -ne 2 ]; then
