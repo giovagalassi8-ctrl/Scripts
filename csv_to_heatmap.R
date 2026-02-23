@@ -7,11 +7,11 @@
 # IMPORTANT: PRELIMINARY CHECK OF THE .CSV FILE
 # Before running this script, it is recommended to open the .csv file and 
 # carefully check the header rows (the first rows defining the columns).
-#
 # Sometimes, when converting from Excel to CSV, cells that were "merged" in Excel 
 # become one filled cell followed by empty cells in the CSV.
 # If there are unwanted white/empty cells in the header rows, the script might 
 # generate incomplete labels.
+
 # -> FILL THESE CELLS with the correct text before launching the script so that 
 #    every column has a complete and correct label in the plot.
 
