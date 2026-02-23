@@ -17,7 +17,7 @@
 # $4 : Long Reads (FASTQ or FASTA, can be .gz)
 # $5 : Number of threads (Optional, default: 6)
 
-# --- 1. Argument Check & Variable Assignment ---
+# --- Argument Check & Variable Assignment ---
 
 if [ "$#" -lt 4 ]; then
     echo "Error: Missing arguments."
@@ -42,7 +42,7 @@ echo "Output Prefix: $BASENAME"
 echo "Using Threads: $THREADS"
 echo "--------------------------------------------------"
 
-# --- 2. Short Reads Processing ---
+# --- Short Reads Processing ---
 echo "[Short Reads] Mapping starts..."
 
 # Map short reads using minimap2
@@ -73,7 +73,7 @@ rm "${BASENAME}_sr.bam"
 echo "[Short Reads] Done. Output: ${BASENAME}_sr_sorted.bam"
 
 
-# --- 3. Long Reads Processing ---
+# --- Long Reads Processing ---
 echo "--------------------------------------------------"
 echo "[Long Reads] Mapping starts..."
 
