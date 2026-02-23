@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 
-# Description: This script is designed to visualize data from a CSV file as an annotated heatmap. It handles complex layouts by merging multi-row headers into clear column labels and applies a custom Red-White-Blue color gradient (0-50-100) to represent intensity.
+# Description: This script is designed to visualize data from a CSV file as an annotated heatmap. 
+# It handles complex layouts by merging multi-row headers into clear column labels and applies a custom Red-White-Blue color gradient (0-50-100) to represent intensity.
 
 # Usage:
 # [bash] Rscript csv_to_heatmap.R <filename>
