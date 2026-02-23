@@ -13,17 +13,14 @@
 #
 #   Objects sharing the same group (MS90_g80) are plotted
 #   on the same Y-axis line with different colors.
-#
+
 # USAGE:
-#   RStudio:
-#     source("interactive_grouped_dotplot.R")
-#
-#   Terminal:
-#     Rscript interactive_grouped_dotplot.R
-#
+# [bash] Rscript interactive_grouped_dotplot.R
+# [RStudio] source("interactive_grouped_dotplot.R")
+
+
 # REQUIRED PACKAGES:
 #   install.packages(c("tidyverse"))
-
 library(tidyverse)
 
 # --- INPUT FILE ---
