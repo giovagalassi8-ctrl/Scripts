@@ -2,10 +2,11 @@
 
 # This script automates the aggregation of BUSCO results from multiple directories. It scans the current folder for BUSCO output directories, identifies the specific lineage run (e.g., metazoa, arthropoda), and copies the result files into a single consolidated directory.
 
-# USAGE: ./collect_busco_results.sh               (Run it in the directory containing your BUSCO output folders)
-# (Optional) To change the input suffix or output folder, edit the "CONFIGURATION" section below before running.
+# USAGE: ./collect_busco_results.sh
+# (Run it in the directory containing your BUSCO output folders)
 
 # --- CONFIGURATION VARIABLES ---
+# To change the input suffix or output folder, edit the "CONFIGURATION" section below before running.
 
 # Looks for directories matching a specific suffix (CHANGE THE SUFFIX IF NECESSARY; default: "_busco")
 INPUT_SUFFIX="_busco"
