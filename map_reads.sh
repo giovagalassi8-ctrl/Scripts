@@ -8,7 +8,7 @@
 # 5. Remove intermediate files to save space.
 #
 # USAGE:
-# ./map_reads.sh <reference.fasta> <short_read_1.fastq> <short_read_2.fastq> <long_reads.fastq> [threads]
+# [bash] ./map_reads.sh <reference.fasta> <short_read_1.fastq> <short_read_2.fastq> <long_reads.fastq> [threads]
 #
 # ARGUMENTS:
 # $1 : Reference genome/assembly (FASTA)
