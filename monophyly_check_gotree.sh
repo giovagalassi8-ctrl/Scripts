@@ -3,7 +3,7 @@
 # This script automates the monophyly check of multiple phylogenetic trees against various taxonomic groups using 'gotree'. 
 # It generates a table where each row represents a specific tree, each column a taxonomic group, and the cells contains the corresponding monophyly results (true or false).
 
-# This script must be run in a folder containing all the tree files you want to measure the monophyly.
+# IMPORTANT: This script must be run in a folder containing all the tree files you want to measure the monophyly.
 # It also needs a folder containing .txt files, each of which refers to a particular taxonomic group present in trees. These files must contain the name of the species analyzed (with space ad a separator, instead of underscore).
 
 # USAGE:
