@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# DESCRIPTION: This script automates the execution of phykit monophyly_check across multiple phylogenetic tree files organized in a nested folder structure. It processes all .treefile files (excluding *_with_clade.treefile) found in subdirectories and consolidates the results into a single output file. 
-#
-# OUTPUT: The results are aggregated into a single output file with the following format:
-#         Tree_Name_Without_Extension
-#         <phykit_output_result>
-#
+# This script automates the execution of phykit monophyly_check across multiple phylogenetic tree files organized in a nested folder structure.
+# It processes all .treefile files (excluding *_with_clade.treefile) found in subdirectories and consolidates the results into a single output file. 
+
+# IMPORTANT: phykit has problems calculating parameters for groups where 2 species are present. 
+#            Although it does not give an error during the process, it fails to give a result in the output.
+
 # Folder Structure Expected:
 #   01_/
 #     01_/*.treefile
@@ -18,10 +18,10 @@
 #   07_/
 #
 # USAGE:
-#   ./run_monophyly_scan.sh <group_file.txt>
+# [bash] ./run_monophyly_scan.sh <group_file.txt>
 
 
-# --- 1. ARGUMENT CHECKING ---
+# --- ARGUMENT CHECKING ---
 # We ensure the user provided exactly one argument (the group file).
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <group_file.txt>"
@@ -43,7 +43,7 @@ if [ ! -f "$GROUP_FILE_PATH" ]; then
     exit 1
 fi
 
-# --- 2. INITIALIZATION ---
+# --- INITIALIZATION ---
 # Create (or overwrite) the output file to start with a clean slate.
 > "$OUTPUT_FILE"
 
@@ -52,8 +52,8 @@ echo "  > Group File: $GROUP_FILE_PATH"
 echo "  > Output File: $OUTPUT_FILE"
 echo "------------------------------------------------------------------"
 
-# --- 3. MAIN LOOP ---
-# Iterate through main directories (01_ to 07_). Change folder number if necessary.
+# --- MAIN LOOP ---
+# Iterate through main directories (change the folder number range if necessary - in this case the range is from 01_ to 07_).
 for main_dir in 0[1-7]_*; do
     
     # Skip if it's not a directory
@@ -65,7 +65,7 @@ for main_dir in 0[1-7]_*; do
         # Skip if it's not a directory
         [ -d "$sub_dir" ] || continue
 
-        # --- 4. FIND THE CORRECT TREEFILE ---
+        # --- FIND THE CORRECT TREEFILE ---
         # We look for a file ending in .treefile BUT NOT _with_clade.treefile (change the -name section in the script if necessary)
         # 'find' is used with '! -name' to exclude the annotated file.
         tree_file=$(find "$sub_dir" -maxdepth 1 -type f -name "*.treefile" ! -name "*_clade.treefile" | head -n 1)      # 'head -n 1' ensures we only pick one file if multiple matches exist.
@@ -73,7 +73,7 @@ for main_dir in 0[1-7]_*; do
         # Check if a valid tree file was found in this folder
         if [ -n "$tree_file" ]; then
             
-            # --- 5. PREPARE OUTPUT FORMAT ---
+            # --- PREPARE OUTPUT FORMAT ---
             # Extract the filename
             base_tree_name=$(basename "$tree_file")
             
@@ -83,9 +83,7 @@ for main_dir in 0[1-7]_*; do
             # Write the clean name to the output file
             echo "$clean_name" >> "$OUTPUT_FILE"
 
-            
-            # --- 6. DYNAMIC INTERSECTION ---
-            
+            # --- DYNAMIC INTERSECTION ---
             # Define a unique temp filename for this iteration
             TEMP_LIST="temp_subset_${clean_name}.txt"
             
@@ -101,7 +99,7 @@ for main_dir in 0[1-7]_*; do
             # Count how many valid taxa were found
             MATCH_COUNT=$(wc -l < "$TEMP_LIST")
             
-            # --- 7. RUN PHYKIT ---
+            # --- RUN PHYKIT ---
             # At least 2 taxa are necessary to check for monophyly
             if [ "$MATCH_COUNT" -ge 2 ]; then
                 
