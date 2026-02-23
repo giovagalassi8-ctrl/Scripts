@@ -4,8 +4,7 @@
 # It scans the current folder for BUSCO output directories, identifies the specific lineage run (e.g., metazoa, arthropoda), and copies the result files into a single consolidated directory.
 
 # USAGE: 
-# [bash] ./collect_busco_results.sh
-# (Run it in the directory containing your BUSCO output folders)
+# [bash] ./collect_busco_results.sh                     (Run it in the directory containing your BUSCO output folders)
 
 # --- CONFIGURATION VARIABLES ---
 # To change the input suffix or output folder, edit the "CONFIGURATION" section below before running.
