@@ -54,3 +54,8 @@ do
     # After testing all groups for this specific tree, print a new line: the next tree on the loop will start on the row below.
     echo ""
 done
+
+
+
+# In the same folder containing the treefiles, it is possible to run 'gotree' to calculate the statistics of each one with the following command:
+# for a in *.treefile; do gotree stats -i "$a" | awk -v f="${a%.treefile}" 'NR>1{print f"\t"$0}'; done > gotree_stats.txt
