@@ -91,7 +91,7 @@ plot_main <- ggplot(
 ) +
 geom_line(
   aes(group = Group),
-  linetype = "dashed",
+  linetype = "solid",
   color = "black"
 ) +
   geom_point(
@@ -101,10 +101,13 @@ geom_line(
   scale_x_continuous(           # Forces the x-axis to always start from zero.
     limits = c(0, NA),
     expand = expansion(mult = c(0, 0.05))
-  ) + 
+  ) +  
   # Applies a clean graphic theme with a white background and a subtle grid.
   theme_bw() +
-  theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + 
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  labs(                      # Sets the axis labels.
+    title = paste("Comparison based on", selected_column),
+    x = selected_column,
     y = "Group",
     color = "Type"
   )
