@@ -101,11 +101,10 @@ geom_line(
   scale_x_continuous(           # Forces the x-axis to always start from zero.
     limits = c(0, NA),
     expand = expansion(mult = c(0, 0.05))
-  ) +                               
-  theme_minimal() +               # Applies a clean graphic theme with a white background and a subtle grid.
-  labs(                      # Sets the axis labels.
-    title = paste("Comparison based on", selected_column),
-    x = selected_column,
+  ) + 
+  # Applies a clean graphic theme with a white background and a subtle grid.
+  theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + 
     y = "Group",
     color = "Type"
   )
