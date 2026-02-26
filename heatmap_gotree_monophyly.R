@@ -22,14 +22,14 @@ heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group,
   geom_tile(color = "black", width = 0.85, height = 0.85) +
   # Assign fill colors directly to the words from Status column.
   scale_fill_manual(values = c("false" = "white", "true" = "darkgreen", 
-                               "FALSE" = "white", "TRUE" = "darkgreen") +
+                               "FALSE" = "white", "TRUE" = "darkgreen")) +
   # Costumize x-axis(move the x-axis and its labels to the top of the plot instead of the default bottom).
   scale_x_discrete(position = "top") +
   # Apply a completely empty theme.
   theme_void() + 
   theme(
-    # Customize the text of the top x-axis.
-    axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5),
-    # Customize the text of the y-axis
-    axis.text.y = element_text(hjust = 1, margin = margin(r = 5))
+  # Customize the text of the top x-axis.
+  axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5),
+  # Customize the text of the y-axis
+  axis.text.y = element_text(hjust = 1, margin = margin(r = 5))
   )
