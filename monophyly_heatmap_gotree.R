@@ -20,6 +20,8 @@ heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group,
                                            fill = as.character(Status))) +  
   # Add a layer to draw rectangles (tiles) for each data point.
   geom_tile(color = "black", width = 0.85, height = 0.85) +
+  # Add a title to the plot
+  labs(title = "MS90")
   # Assign fill colors directly to the words from Status column.
   scale_fill_manual(values = c("false" = "white", "true" = "darkgreen", 
                                "FALSE" = "white", "TRUE" = "darkgreen")) +
@@ -29,7 +31,14 @@ heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group,
   theme_void() + 
   theme(
   # Customize the text of the top x-axis.
-  axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5),
+  axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5),  # To remove all the names on the x-axis change with 'element_blank()'
   # Customize the text of the y-axis
   axis.text.y = element_text(hjust = 1, margin = margin(r = 5))
+  # Center the title relative to the entire plot area
+  plot.title.position = "plot",
+  # Edit the title  
+  plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 1))
   )
+
+# ggsave settings can be corrected to change the plot size as desired.
+ggsave(file = "monophyly_heatmap_gotree.pdf", heatmap_plot, width = 7, height = 3, dpi = 300)
