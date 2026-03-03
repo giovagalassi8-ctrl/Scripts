@@ -1,0 +1,64 @@
+library(pheatmap)
+library(RColorBrewer)
+
+data <- read.csv("MS90_gappyout_allgenes_filtered.csv", check.names = FALSE)
+colnames(data)[1] <- "Groups"
+aa <- c("A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y")
+
+groups <- c("Platyhelmintes", "Macrodasyida", "Chaetonotida")
+
+# Removes all species in the dataset that are not of interest, 
+# filtering them through the groups vector (containing the interest groups instead)
+filtered_data <- data[data$Groups %in% groups, ]
+# Sort the species in the table by taxonomic group to which they belong.
+filtered_data <- filtered_data[order(filtered_data$Groups), ]
+
+# Create the amminoacid matrix.
+matrix <- as.matrix(filtered_data[, aa])
+# gsub() replaces patterns within character sequences.In this case the "_" has been replaced with a space 
+rownames(matrix) <- gsub("_", " ", filtered_data$Taxon_name)
+
+dayhoff <- c(
+  "A","G","P","S","T", #Aliphatic/Polar
+  "C", #Cysteine
+  "D","E","N","Q", #Acidic
+  "F","W","Y", #Aromatic
+  "H","K","R", #Basic
+  "I","L","M","V" #Aliphatic/Hydrophobic
+)
+#Order with dayhoff
+matrix <- matrix[, dayhoff]
+
+# Create a dataframe with the group of each species (use later for the sidebar)
+rows_annotation <- data.frame(Groups = filtered_data$Groups, row.names = row.names(matrix))
+
+colors <- list(Groups = c("Chaetonotida"   = "blue",
+                          "Macrodasyida"   = "darkgreen",
+                          "Platyhelmintes" = "red"))
+
+heatmap_scale_colors <- colorRampPalette(c("coral1","cornsilk","cyan"))(10)
+
+
+pheatmap(
+  mat = matrix,
+  color = heatmap_scale_colors,
+  cluster_rows = TRUE, # Boolean values determining if rows should be clustered or 'hclust' objects.
+  # Select the agglomeration method to be used
+  # Other options are: "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC), "centroid" (= UPGMC).
+  clustering_method = "ward.D2",
+  clustering_distance_rows = "euclidean",
+  cluster_cols = FALSE, # Boolean values determining if columns should be clustered or 'hclust' objects.
+  clustering_distance_cols = "euclidean",
+  treeheight_row = 50, # The height of a tree for rows, if these are clustered.
+  treeheight_col = 50, # The height of a tree for columns, if these are clustered.
+  # Lateral annotation of the groups.
+  annotation_row = rows_annotation,
+  annotation_colors = colors,
+  fontsize_row = 8, # dimension for rownames.
+  fontsize_col = 10, # dimension for colnames.
+  angle_col = 0, # Angle of the column labels (0, 45, 90, 270, 315).
+  italic = TRUE, # Set the text font.
+  main = "Heatmap",
+  border_color = "black",
+  legend = TRUE
+)
