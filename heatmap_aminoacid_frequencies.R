@@ -97,6 +97,9 @@ pheatmap(
   
   main = "Heatmap", # Plot title.
   border_color = "black", # Color of the borders around each heatmap cell.
-  legend = TRUE # Display the color scale legend.
+  legend = TRUE, # Display the color scale legend.
+  
+  # If necessary, removes the column name (in this case overlaps with the first amino acid in the small size image).
+  gaps_col = NULL,
+  annotation_names_row = FALSE
 )
-
