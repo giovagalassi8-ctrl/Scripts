@@ -4,7 +4,7 @@
 # builds individual plots with custom themes, and finally combines them into a single layout. Optionally, it computes and appends summary statistics tables next to each corresponding plot.
 
 # USAGE:
-# [Rstudio] source: dansityplot_with_table.R
+# [Rstudio] source(densityplot_with_table.R)
 
 library(ggplot2)
 library(patchwork)
