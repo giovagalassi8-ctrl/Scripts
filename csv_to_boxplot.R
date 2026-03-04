@@ -3,12 +3,11 @@
 # This script reads a CSV file containing different data from different species (each one associated to an higher taxonomic group).
 # It produces a boxplot visualizing the distribution of the selected statistic using ggplot2, with custom colors and clean formatting.
 
-# IMPORTANT: PRELIMINARY CHECK OF THE .CSV FILE
-# Before running this script, it is recommended to open the .csv file and 
-# carefully check the header rows (the first rows defining the columns).
+# IMPORTANT: Before launching it, check that the file is in .csv format.
 
 # USAGE:
 # [Rstudio] source(boxplot_with_table.R)
+
 
 library(ggplot2)
 
