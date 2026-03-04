@@ -3,6 +3,9 @@
 # This script visualizes phylogenetic tree metrics by generating combined density and dot plots for Mean Branch Length, Sum Branch Length, and Mean Support. It reads data from text files, 
 # builds individual plots with custom themes, and finally combines them into a single layout. Optionally, it computes and appends summary statistics tables next to each corresponding plot.
 
+# USAGE:
+# [Rstudio] source: dansityplot_with_table.R
+
 library(ggplot2)
 library(patchwork)
 library(gridExtra)
