@@ -62,9 +62,9 @@ rows_annotation <- data.frame(Groups = filtered_data$Groups,
                               row.names = row.names(matrix))
 
 # Define sidebar colors. Each taxonomic group is assigned a distinct color.
-colors <- list(Groups = c("Chaetonotida"   = "blue",
-                          "Macrodasyida"   = "darkgreen",
-                          "Platyhelmintes" = "red"))
+colors <- list(Groups = c("Chaetonotida"   = "#8088a6",
+                          "Macrodasyida"   = "#93C6D0",
+                          "Platyhelmintes" = "#8B0000"))
 
 # Create a continuous color gradient for the heatmap cells.
 heatmap_scale_colors <- viridis(100)
