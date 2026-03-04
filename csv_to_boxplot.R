@@ -7,7 +7,7 @@
 # Before running this script, it is recommended to open the .csv file and 
 # carefully check the header rows (the first rows defining the columns).
 
-#USAGE:
+# USAGE:
 # [Rstudio] source: boxplot_with_table.R
 
 library(ggplot2)
