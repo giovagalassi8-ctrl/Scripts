@@ -17,6 +17,7 @@
 # $4 : Long Reads (FASTQ or FASTA, can be .gz)
 # $5 : Number of threads (Optional, default: 6)
 
+
 # --- Argument Check & Variable Assignment ---
 
 if [ "$#" -lt 4 ]; then
