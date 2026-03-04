@@ -5,6 +5,7 @@
 # USAGE: 
 # [bash] ./annotate_tree.sh <mapping_table.tsv> <tree_file>
 
+
 # Check if the correct number of arguments is provided
 if [ "$#" -ne 2 ]; then
     echo "Error: Invalid number of arguments."
