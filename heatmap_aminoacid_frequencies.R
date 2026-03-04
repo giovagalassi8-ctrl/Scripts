@@ -13,6 +13,7 @@
 # USAGE:
 # [Rstudio] source(heatmap_aminoacid_frequencies.R)
 
+
 library(pheatmap)
 library(RColorBrewer)
 
