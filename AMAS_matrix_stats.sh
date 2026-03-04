@@ -5,6 +5,7 @@
 # USAGE:
 # [bash] ./AMAS_matrix_stats.sh
 
+
 # Output directory where copied files and AMAS results will be stored
 OUTDIR="11_matrix_stats"
 
