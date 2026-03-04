@@ -1,4 +1,4 @@
-#!/bin/bash
+# !/bin/bash
 
 # This script automates the monophyly check of multiple phylogenetic trees against various taxonomic groups using 'gotree'. 
 # It generates a table where each row represents a specific tree, each column a taxonomic group, and the cells contains the corresponding monophyly results (true or false).
