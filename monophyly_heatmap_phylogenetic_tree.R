@@ -10,6 +10,7 @@
 # USAGE:
 # [Rstudio] source(monophyly_heatmap_phylogenetic_tree.R)
 
+
 # Load necessary libraries
 library(ape)
 library(ggtree)
@@ -84,4 +85,5 @@ heatmap_plot$layers[[heatmap_layer]]$aes_params$width <- col_spacing * 0.8
 
 # Save the final plot to a PDF file
 ggsave(file = "phylotree_monophyly_heatmap.pdf", plot = heatmap_plot, width = 10, height = 7, dpi = 300)
+
 
