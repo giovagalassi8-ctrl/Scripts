@@ -6,16 +6,12 @@
 # USAGE: 
 # [bash] ./collect_busco_results.sh                     (Run it in the directory containing your BUSCO output folders)
 
-# --- CONFIGURATION VARIABLES ---
-# To change the input suffix or output folder, edit the "CONFIGURATION" section below before running.
 
 # Looks for directories matching a specific suffix (CHANGE THE SUFFIX IF NECESSARY; default: "_busco")
 INPUT_SUFFIX="_busco"
 
 # The name of the new directory where files will be collected (CHANGE THE NAME OF THE RESULTING DIRECTORY IF NECESSARY)
 OUTPUT_DIR="all_busco_sequences"
-
-# --- MAIN SCRIPT ---
 
 # Create the main output directory if it doesn't exist
 # -p ensures no error if it already exists
