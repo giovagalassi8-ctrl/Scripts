@@ -19,12 +19,9 @@
 # [RStudio] source("interactive_grouped_dotplot.R")
 
 
-# REQUIRED PACKAGES:
-#   install.packages(c("tidyverse"))
 library(tidyverse)
 
 # --- INPUT FILE ---
-
 input_file <- "MS90_all_matrix_stats.txt"    # Change file name if necessary
 
 if (!file.exists(input_file)) {
@@ -32,7 +29,6 @@ if (!file.exists(input_file)) {
 }
 
 # --- READ DATA ---
-
 data_raw <- read_table(input_file)
 
 # Rename first column as Object
@@ -41,7 +37,6 @@ colnames(data_raw)[1] <- "Object"
 # --- PARSE OBJECT NAMES ---
 # Expected structure (example):
 #   concatenated_MS90_g80_allgenes.out
-
 data_parsed <- data_raw %>%
   mutate(
     Object_clean = gsub("\\.out$", "", Object),       # Removes the file extension, in this case .out; if it is different, change it accordingly.
@@ -54,7 +49,6 @@ data_parsed <- data_raw %>%
   )
 
 # --- INTERACTIVE COLUMN SELECTION ---
-
 numeric_cols <- names(data_parsed)[sapply(data_parsed, is.numeric)]
 
 cat("\nAvailable numeric columns:\n")
@@ -75,12 +69,10 @@ cat("\nSelected column:", selected_column, "\n")
 
 # --- PREPARE DATA FOR PLOTTING ---
 # Data is being processed for visualization purposes.
-
 plot_data <- data_parsed %>%
   select(Group, ColorGroup, Value = all_of(selected_column))
 
 # --- CREATE PLOT ---
-
 plot_main <- ggplot(
   plot_data,
   aes(
@@ -115,7 +107,6 @@ geom_line(
 print(plot_main)
 
 # --- ASK WHETHER TO SAVE ---
-
 cat("\nDo you want to save the plot? (y/n): ")
 save_choice <- tolower(readLines(con = stdin(), n = 1))
 
