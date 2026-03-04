@@ -1,6 +1,10 @@
 #!/usr/bin/env Rscript
 
-#This script takes the result of gotree analysis on monophyly (in csv format) to create a costum heatmap where the various squares are separated from each other.
+# This script takes the result of gotree analysis on monophyly (in csv format) 
+# to create a costum heatmap where the various squares are separated from each other.
+
+# USAGE:
+# [Rstudio] source(monophyly_heatmap_gotree)
 
 # Load required packages
 library(ggplot2)
