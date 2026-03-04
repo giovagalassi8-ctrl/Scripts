@@ -8,7 +8,7 @@
 # carefully check the header rows (the first rows defining the columns).
 
 # USAGE:
-# [Rstudio] source: boxplot_with_table.R
+# [Rstudio] source(boxplot_with_table.R)
 
 library(ggplot2)
 
