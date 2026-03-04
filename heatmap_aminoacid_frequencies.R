@@ -16,6 +16,7 @@
 
 library(pheatmap)
 library(RColorBrewer)
+library(viridis)
 
 # Read the CSV file into a data frame.
 data <- read.csv("MS90_gappyout_allgenes_filtered.csv", check.names = FALSE)  # check.names = FALSE prevents R from automatically altering column names
@@ -66,7 +67,7 @@ colors <- list(Groups = c("Chaetonotida"   = "blue",
                           "Platyhelmintes" = "red"))
 
 # Create a continuous color gradient for the heatmap cells.
-heatmap_scale_colors <- colorRampPalette(c("coral1","cornsilk","cyan"))(10)
+heatmap_scale_colors <- viridis(100)
 
 # Generate the heatmap
 pheatmap(
