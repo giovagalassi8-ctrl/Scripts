@@ -3,10 +3,6 @@
 # This script is designed to visualize data from a CSV file as an annotated heatmap. 
 # It handles complex layouts by merging multi-row headers into clear column labels and applies a custom Red-White-Blue color gradient (0-50-100) to represent intensity.
 
-# USAGE:
-# [bash] Rscript csv_to_heatmap.R <filename>
-# [Rstudio] source(csv_to_heatmap.R)
-
 # IMPORTANT: PRELIMINARY CHECK OF THE .CSV FILE
 # Before running this script, it is recommended to open the .csv file and 
 # carefully check the header rows (the first rows defining the columns).
@@ -17,6 +13,10 @@
 
 # -> FILL THESE CELLS with the correct text before launching the script so that 
 #    every column has a complete and correct label in the plot.
+
+# USAGE:
+# [bash] Rscript csv_to_heatmap.R <filename>
+# [Rstudio] source(csv_to_heatmap.R)
 
 
 # --- CONFIGURATION (CHANGE THESE VALUES AS NEEDED) ---
