@@ -10,6 +10,9 @@
 # in this case the various amino acid frequencies have been normalized using the following command for each amino acid (columns):
 # data <- transform(data, 'column name' = ('column name' - min('column name', na.rm = TRUE)) / (max('column name', na.rm = TRUE) - min('column name', na.rm = TRUE))))
 
+# USAGE:
+# [Rstudio] source(heatmap_aminoacid_frequencies.R)
+
 library(pheatmap)
 library(RColorBrewer)
 
