@@ -26,7 +26,7 @@ heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group,
   # Add a layer to draw rectangles (tiles) for each data point.
   geom_tile(color = "black", width = 0.85, height = 0.85) +
   # Add a title to the plot (change as you want).
-  labs(title = "TITLE")
+  labs(title = "TITLE") +
   # Assign fill colors directly to the words from Status column (change the colours if necessary).
   scale_fill_manual(values = c("false" = "white", "true" = "darkgreen", 
                                "FALSE" = "white", "TRUE" = "darkgreen")) +
