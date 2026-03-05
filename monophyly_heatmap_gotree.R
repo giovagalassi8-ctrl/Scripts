@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+# !/usr/bin/env Rscript
 
 # This script takes the result of gotree analysis on monophyly (in csv format) 
 # to create a costum heatmap where the various squares are separated from each other.
@@ -12,7 +12,7 @@ library(ggplot2)
 library(tidyr)
 
 # Import the CSV file
-monophyly <- read.csv("03_Gotree/00_stats/monophyly_results_gotree.csv", stringsAsFactors = FALSE)
+monophyly <- read.csv("INPUT_FILE", stringsAsFactors = FALSE)
 
 # The ggplot2 library strictly requires that data be organized in a "long" format, where each column represents a single logical variable.
 # In a classic CSV table (wide format), however, information is mixed between row names, column names, and values in cells.
@@ -25,9 +25,9 @@ heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group,
                                            fill = as.character(Status))) +  
   # Add a layer to draw rectangles (tiles) for each data point.
   geom_tile(color = "black", width = 0.85, height = 0.85) +
-  # Add a title to the plot
-  labs(title = "MS90")
-  # Assign fill colors directly to the words from Status column.
+  # Add a title to the plot (change as you want).
+  labs(title = "TITLE")
+  # Assign fill colors directly to the words from Status column (change the colours if necessary).
   scale_fill_manual(values = c("false" = "white", "true" = "darkgreen", 
                                "FALSE" = "white", "TRUE" = "darkgreen")) +
   # Costumize x-axis(move the x-axis and its labels to the top of the plot instead of the default bottom).
