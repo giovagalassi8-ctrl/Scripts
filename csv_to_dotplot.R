@@ -25,7 +25,7 @@ library(tidyverse)
 data <- read_table("<INPUT_FILE>")
 
 # Rename first column as Object for clarity (it's the column containing the name of the objects).
-colnames(data_raw)[1] <- "Objects"
+colnames(data)[1] <- "Objects"
 
 # Creates the vector containing the colors to be assigned to the various groups recognized by the script based on the object name
 color <- c(
