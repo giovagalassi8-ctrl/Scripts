@@ -11,7 +11,7 @@
 
 library(ggplot2)
 
-# Read the CSV file with the interest data.
+# Read the CSV file with the interest data (change with the correct .csv file name).
 data <- read.csv("INPUT_FILE")
 
 # Rename the first column to "groups" for clarity (it's the column containing the higher taxonomic grouping).
