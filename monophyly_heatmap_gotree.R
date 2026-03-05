@@ -44,6 +44,3 @@ heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group,
   # Edit the title  
   plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 1))
   )
-
-# ggsave settings can be corrected to change the plot size as desired.
-ggsave(file = "monophyly_heatmap_gotree.pdf", heatmap_plot, width = 7, height = 3, dpi = 300)
