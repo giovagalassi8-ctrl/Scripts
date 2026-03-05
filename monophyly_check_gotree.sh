@@ -4,21 +4,23 @@
 # It generates a table where each row represents a specific tree, each column a taxonomic group, and the cells contains the corresponding monophyly results (true or false).
 
 # IMPORTANT: This script must be run in a folder containing all the tree files you want to measure the monophyly.
-# It also needs a folder containing .txt files, each of which refers to a particular taxonomic group present in trees. These files must contain the name of the species analyzed (with space ad a separator, instead of underscore).
+# It also needs a folder containing .txt files, each of which refers to a particular taxonomic group present in trees. 
+# These files must contain the name of the species analyzed (with space as separator, instead of underscore).
 
 # USAGE:
 # [bash] run_monophyly_gotree > <output_name>
 
+# Once finished this script, it is possible to run 'gotree' in the same folder containing the treefiles to calculate the statistics of each file with the following command:
+# for a in *.treefile; do gotree stats -i "$a" | awk -v f="${a%.treefile}" 'NR>1{print f"\t"$0}'; done > gotree_stats.txt
 
-# --- INPUT FILES ---
+
+# Set the imput files.
 # Stores all files ending in .treefile in the directory
 trees="*.treefile"
 # Stores all text files in a 'gropus' folder. In this case the folder is located one level up: change the path if necessary.
 groups="../groups/*.txt"
 
-# --- HEADER GENERATION ---
-
-# Print the first column header ("Tree")
+# Print the first column header ("Tree").
 echo -ne "Tree"
 
 # Loop throught each group file to create the rest of the column headers.
@@ -33,8 +35,7 @@ done
 # Print a clean new line to finish the header row and move to the data section.
 echo ""
 
-# --- DATA PROCESSING ---
-
+# Start the data processing.
 # Loop throught each file. Each tree will represent a single row in the final table.
 for t in $trees
 do
@@ -54,8 +55,3 @@ do
     # After testing all groups for this specific tree, print a new line: the next tree on the loop will start on the row below.
     echo ""
 done
-
-
-
-# In the same folder containing the treefiles, it is possible to run 'gotree' to calculate the statistics of each one with the following command:
-# for a in *.treefile; do gotree stats -i "$a" | awk -v f="${a%.treefile}" 'NR>1{print f"\t"$0}'; done > gotree_stats.txt
