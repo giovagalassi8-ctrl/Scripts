@@ -18,10 +18,10 @@ library(pheatmap)
 library(RColorBrewer)
 library(viridis)
 
-# Read the CSV file into a data frame.
-data <- read.csv("MS90_gappyout_allgenes_filtered.csv", check.names = FALSE)  # check.names = FALSE prevents R from automatically altering column names
+# Read the CSV file into a data frame (change with the correct file name).
+data <- read.csv("INPUT_FILE", check.names = FALSE)  # check.names = FALSE prevents R from automatically altering column names
 
-# Rename the first column to "Groups" for clarity
+# Rename the first column to "Groups" for clarity.
 colnames(data)[1] <- "Groups"
 
 # Create the vector of the 20 amino acid (one-letter code).
