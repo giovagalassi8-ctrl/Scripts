@@ -12,7 +12,7 @@
 library(ggplot2)
 
 # Read the CSV file with the interest data.
-data <- read.csv("MS90_gappyout_allgenes_filtered.csv")
+data <- read.csv("INPUT_FILE")
 
 # Rename the first column to "groups" for clarity (it's the column containing the higher taxonomic grouping).
 colnames(data)[1] <- "groups"
