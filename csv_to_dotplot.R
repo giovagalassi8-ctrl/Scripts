@@ -21,8 +21,8 @@
 
 library(tidyverse)
 
-# Read the file with the statistics.
-data <- read_table(input_file)
+# Read the file with the statistics (change with the correct file path).
+data <- read_table("<INPUT_FILE>")
 
 # Rename first column as Object for clarity (it's the column containing the name of the objects).
 colnames(data_raw)[1] <- "Objects"
