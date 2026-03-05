@@ -23,10 +23,10 @@ library(ggplot2)
 library(tidyverse)
 
 # Read the file with the statistics (change with the correct file path).
-data <- read_table(<"INPUT_FILE">)
+data <- read_table("INPUT_FILE")
 
-# Select the column of interest.
-selected_column <- <"COLUMN_NAME">
+# Select the column of interest (change with the correct column name).
+selected_column <- "COLUMN_NAME"
 
 # Rename first column as Object for clarity (it's the column containing the name of the objects).
 colnames(data)[1] <- "Objects"
@@ -73,8 +73,8 @@ plot <- ggplot(data_plot, aes(x = Value, y = Group, color = ColorGroup)) +
     panel.grid.minor = element_blank(),
     axis.line        = element_line(colour = "black")
   ) +
-  # Add the labels to the graph.Change the title and axis-name if necessary.
-  labs(title = paste(<"TITLE">),
-       x = <"X-AXIS_NAME">, y = <"Y-AXIS_NAME">, color = "Type") +
+  # Add the labels to the graph (change the title and axis name).
+  labs(title = paste("TITLE"),
+       x = "X-AXIS_NAME", y = "Y-AXIS_NAME", color = "Type") +
   # Set the title in the middle.
   theme(plot.title = element_text(hjust = 0.5))
