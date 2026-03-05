@@ -2,11 +2,15 @@
 
 # This script annotates a phylogenetic tree file by appending a clade suffix to the species names, based on a provided mapping table.
 
+# REQUIRED ITEMS:
+# 1. Mapping file (tsv format) contains species names in column 1 and their corresponding clades in column 2.
+# 2. The target tree file where labels will be added.
+
 # USAGE: 
 # [bash] ./annotate_tree.sh <mapping_table.tsv> <tree_file>
 
 
-# Check if the correct number of arguments is provided
+# Check if the correct number of arguments is provided.
 if [ "$#" -ne 2 ]; then
     echo "Error: Invalid number of arguments."
     echo "Usage: $0 <mapping_table.tsv> <tree_file>"
@@ -17,7 +21,7 @@ fi
 MAPPING_FILE="$1"      # Mapping file (tsv format) contains species names in column 1 and their corresponding clades in column 2.
 TREE_FILE="$2"         # The target tree file where labels will be added.
 
-# Generate output filename
+# Generate output filename.
 # We take the full input filename ($TREE_FILE) and append the suffix directly.
 BASE_NAME="${TREE_FILE%.*}"
 OUTPUT_FILE="${BASE_NAME}_annotated.treefile"
@@ -26,7 +30,7 @@ echo "Starting annotation process..."
 echo "  > Reading mapping from: $MAPPING_FILE"
 echo "  > Reading tree from:    $TREE_FILE"
 
-# Start awk processing
+# Start awk processing.
 awk -v OFS="" '
     # --- Load Mapping Data ---
     NR==FNR {
