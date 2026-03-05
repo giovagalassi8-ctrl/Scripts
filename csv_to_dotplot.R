@@ -19,10 +19,14 @@
 # [RStudio] source("interactive_grouped_dotplot.R")
 
 
+library(ggplot2)
 library(tidyverse)
 
 # Read the file with the statistics (change with the correct file path).
-data <- read_table("<INPUT_FILE>")
+data <- read_table(<"INPUT_FILE">)
+
+# Select the column of interest.
+selected_column <- <"COLUMN_NAME">
 
 # Rename first column as Object for clarity (it's the column containing the name of the objects).
 colnames(data)[1] <- "Objects"
@@ -48,7 +52,7 @@ data_parsed <- data %>% mutate(
   )
 
 # Select only the column needed by the chart, renaming the one of the values (change the name based on the column of interest).
-data_plot <- select(data_parsed, Group, ColorGroup, Value = all_of("Missing_percent"))
+data_plot <- select(data_parsed, Group, ColorGroup, Value = all_of(selected_column))
 
 # Create the dotplot
 plot <- ggplot(data_plot, aes(x = Value, y = Group, color = ColorGroup)) +
@@ -69,7 +73,8 @@ plot <- ggplot(data_plot, aes(x = Value, y = Group, color = ColorGroup)) +
     panel.grid.minor = element_blank(),
     axis.line        = element_line(colour = "black")
   ) +
-  # Add the labels to the graph
-  labs(title = paste("Missing Percent Dotplot"),
-       x = "Missing_percent", y = "Group", color = "Type")
-
+  # Add the labels to the graph.Change the title and axis-name if necessary.
+  labs(title = paste(<"TITLE">),
+       x = <"X-AXIS_NAME">, y = <"Y-AXIS_NAME">, color = "Type") +
+  # Set the title in the middle.
+  theme(plot.title = element_text(hjust = 0.5))
