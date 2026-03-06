@@ -24,7 +24,7 @@ library(tidyr)
 library(dplyr)
 
 # If the file used has more header than 1, we first read the three header rows separately (to assign object's name on the graph).
-heaader1 <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, nrows = 1)
+header1 <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, nrows = 1)
 header2 <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, skip = 1, nrows = 1)
 header3 <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, skip = 2, nrows = 1)
 
