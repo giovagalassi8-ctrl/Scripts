@@ -66,10 +66,10 @@ data_long <- values %>%
 heatmap <- ggplot(df, aes(x = x_label, y = model, fill = value)) +
   # Draw tiles; 'color' = border color, 'linewidth' = border thickness.
   # 'width'/'height' < 1 creates the small white gap between tiles.
-  geom_tile(color = "black", linewidth = 0.5, width = 0.5, height = 0.5) +
+  geom_tile(color = "black", linewidth = 0.5, width = 0.85, height = 0.85) +
   # Print the numeric value inside each tile (skip NA cells).
   geom_text(aes(label = ifelse(is.na(value), "", value)),
-            size = 3, color = "black") +
+            size = 3, color = "white") +
   # Set the color gradient.
   scale_fill_gradient2(low      = "red",
                        mid      = "white",
@@ -83,7 +83,7 @@ heatmap <- ggplot(df, aes(x = x_label, y = model, fill = value)) +
   # Axis and plot titles.
   labs(title = "MS90", x = NULL, y = NULL) +
   # Clean white theme.
-  theme_bw() +
+  theme_void() +
   theme(
     axis.text.x  = element_text(angle = 0, hjust = 0.5,
                                 vjust = 0.5, lineheight = 1.1),
