@@ -40,8 +40,10 @@ x_labels <- paste(as.character(row1[-1]),
                   sep = "\n")
 
 # Extract model names (y-axis) and numeric values.
-model_names <- data[, 1]          # first column  → y-axis labels.
-values      <- data[, -1]         # all other columns → cell values.
+# First column  → y-axis labels.
+model_names <- data[, 1]
+# All other columns → cell values.
+values <- data[, -1]
 
 # Convert to a long ("tidy") data frame for ggplot.
 # Assign the combined x-axis labels as column names.
@@ -64,9 +66,14 @@ data_long <- values %>%
 
 # Draw the heatmap.
 heatmap <- ggplot(df, aes(x = x_label, y = model, fill = value)) +
-  # Draw tiles; 'color' = border color, 'linewidth' = border thickness.
-  # 'width'/'height' < 1 creates the small white gap between tiles.
-  geom_tile(color = "black", linewidth = 0.5, width = 0.85, height = 0.85) +
+  geom_tile(
+    # Set the border color.
+    color = "black", 
+    # Set the border thickness.
+    linewidth = 0.5,
+    # 'width'/'height' < 1 creates the small white gap between tiles.
+    width = 0.85, 
+    height = 0.85) +
   # Print the numeric value inside each tile (skip NA cells).
   geom_text(aes(label = ifelse(is.na(value), "", value)),
             size = 3, color = "white") +
@@ -84,6 +91,7 @@ heatmap <- ggplot(df, aes(x = x_label, y = model, fill = value)) +
   labs(title = "MS90", x = NULL, y = NULL) +
   # Clean white theme.
   theme_void() +
+  # Other labels settings.
   theme(
     axis.text.x  = element_text(angle = 0, hjust = 0.5,
                                 vjust = 0.5, lineheight = 1.1),
