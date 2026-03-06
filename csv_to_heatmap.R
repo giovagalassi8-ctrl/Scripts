@@ -19,124 +19,75 @@
 # [Rstudio] source(csv_to_heatmap.R)
 
 
-# --- CONFIGURATION (CHANGE THESE VALUES AS NEEDED) ---
+library(ggplot2)
+library(tidyr)
+library(dplyr)
 
-# Input file
-INPUT_FILE  <- "extracted_Table.csv"
+# If the file used has more header than 1, we first read the three header rows separately (to assign object's name on the graph).
+heaader1 <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, nrows = 1)
+header2 <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, skip = 1, nrows = 1)
+header3 <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, skip = 2, nrows = 1)
 
-# HEADER ROWS: Number of rows at the top to use as column headers.
-# Change this to 1 if you only have one header line.
-# Change this to 3 (default) to merge the top 3 rows into the column name.
-HEADER_ROWS <- 3 
+# Read the data rows (everything after the 3 header rows).
+data <- read.csv("01_Heatmap_Matrix/extracted_Table.csv", header = FALSE, skip = 3,
+                 colClasses = "character")
 
-# VISUAL SETTINGS
-GRID_WIDTH  <- 15   # Change square shape (increase the number to make square smaller and margins larger)
+# Build x-axis labels by combining the three header rows.
+# Remove the first element of each header row, then paste the three rows together with a newline separator.
+x_labels <- paste(as.character(row1[-1]),
+                  as.character(row2[-1]),
+                  as.character(row3[-1]),
+                  sep = "\n")
 
-TEXT_SIZE   <- 0.7  # Change inbox text dimension
+# Extract model names (y-axis) and numeric values.
+model_names <- data[, 1]          # first column  → y-axis labels.
+values      <- data[, -1]         # all other columns → cell values.
 
-# Color scale (Red=0, White=50, Blue=100)
-MIN_VAL <- 0
-MID_VAL <- 50
-MAX_VAL <- 100
+# Convert to a long ("tidy") data frame for ggplot.
+# Assign the combined x-axis labels as column names.
+colnames(values) <- x_labels
 
-# Output filename (PDF)
-OUTPUT_FILE <- "heatmap_output.pdf"
+# Add the model names as a column, then reshape from wide to long format.
+data_long <- values %>%
+  mutate(model = model_names) %>%
+  pivot_longer(cols      = -model,
+               names_to  = "x_label",
+               values_to = "value") %>%
+  mutate(
+    # Convert values to numbers (empty cells become NA).
+    value   = suppressWarnings(as.numeric(value)),
+    # Keep the original column order on the x-axis.
+    x_label = factor(x_label, levels = x_labels),
+    # Keep the original row order on the y-axis (top = first row).
+    model   = factor(model,   levels = rev(model_names))
+  )
 
-# --- MAIN SCRIPT ---
-
-# 1. Read Data
-if (!file.exists(INPUT_FILE)) {
-  stop(paste("Error: File not found:", INPUT_FILE))
-}
-
-# Read raw lines to handle irregular headers
-raw_lines <- readLines(INPUT_FILE)
-full_df   <- read.csv(text = raw_lines, header = FALSE, stringsAsFactors = FALSE, check.names = FALSE)
-
-# 2. Process Headers
-if (HEADER_ROWS > 0) {
-  # Extract top rows for headers
-  headers_part <- full_df[1:HEADER_ROWS, , drop = FALSE]
-  data_part    <- full_df[(HEADER_ROWS + 1):nrow(full_df), , drop = FALSE]
-  
-  # Merge header columns vertically
-  merged_headers <- apply(headers_part, 2, function(col) {
-    # Remove NAs and empty strings, then join with a newline
-    clean_vals <- col[!is.na(col) & trimws(col) != ""]
-    paste(clean_vals, collapse = "\n") 
-  })
-  colnames(data_part) <- merged_headers
-} else {
-  data_part <- full_df
-}
-
-# 3. Process Data Matrix
-# Assume first column is Row Names
-row_labels <- data_part[, 1]
-matrix_data <- data_part[, -1]
-
-# Convert to numeric matrix (suppress warnings for NAs)
-mat <- suppressWarnings(sapply(matrix_data, as.numeric))
-rownames(mat) <- row_labels
-
-# Remove rows/cols that are completely empty/NA
-mat <- mat[, colSums(!is.na(mat)) > 0, drop = FALSE]
-mat <- mat[rowSums(!is.na(mat)) > 0, , drop = FALSE]
-
-# Flip matrix (so row 1 is at the top in the plot)
-mat_flipped <- mat[nrow(mat):1, , drop = FALSE]
-
-# 4. Define Colors (Red -> White -> Blue)
-steps <- 100
-palette <- c(
-  colorRampPalette(c("red", "white"))(steps/2),
-  colorRampPalette(c("white", "blue"))(steps/2)
-)
-
-# 5. Plotting Function
-draw_plot <- function() {
-  n_rows <- nrow(mat_flipped)
-  n_cols <- ncol(mat_flipped)
-  
-  # Margins: Bottom, Left, Top, Right
-  par(mar = c(5, 8, 4, 2))
-  
-  # Draw base heatmap
-  image(1:n_cols, 1:n_rows, t(mat_flipped), 
-        col = palette, 
-        axes = FALSE, 
-        xlab = "", ylab = "",
-        zlim = c(MIN_VAL, MAX_VAL),
-        main = "Heatmap Analysis")
-  
-  # --- THE TRICK: Draw thick white grid lines to create separation ---
-  # Vertical white lines
-  abline(v = seq(0.5, n_cols + 0.5, 1), col = "white", lwd = GRID_WIDTH)
-  # Horizontal white lines
-  abline(h = seq(0.5, n_rows + 0.5, 1), col = "white", lwd = GRID_WIDTH)
-  # -----------------------------------------------------------------
-  
-  # Add Labels
-  axis(1, at = 1:n_cols, labels = colnames(mat_flipped), las = 1, tick = FALSE, cex.axis = 0.7)
-  axis(2, at = 1:n_rows, labels = rownames(mat_flipped), las = 2, tick = FALSE, cex.axis = 0.8)
-  
-  # Add Numbers (plotted ON TOP of the white grid)
-  for (x in 1:n_cols) {
-    for (y in 1:n_rows) {
-      val <- t(mat_flipped)[x, y]
-      if (!is.na(val)) {
-        # Check if value is dark (blue/red) to use white text, else black
-        text_col <- ifelse(abs(val - MID_VAL) > 25, "white", "black")
-        text(x, y, labels = round(val, 1), col = text_col, cex = TEXT_SIZE, font = 2)
-      }
-    }
-  }
-}
-
-# 6. Execute and Save
-cat("Generating PDF...\n")
-pdf(OUTPUT_FILE, width = 12, height = 8)
-draw_plot()
-dev.off()
-
-cat(paste("Done! Saved to", OUTPUT_FILE, "\n"))
+# Draw the heatmap.
+heatmap <- ggplot(df, aes(x = x_label, y = model, fill = value)) +
+  # Draw tiles; 'color' = border color, 'linewidth' = border thickness.
+  # 'width'/'height' < 1 creates the small white gap between tiles.
+  geom_tile(color = "black", linewidth = 0.5, width = 0.5, height = 0.5) +
+  # Print the numeric value inside each tile (skip NA cells).
+  geom_text(aes(label = ifelse(is.na(value), "", value)),
+            size = 3, color = "black") +
+  # Set the color gradient.
+  scale_fill_gradient2(low      = "red",
+                       mid      = "white",
+                       high     = "blue",
+                       midpoint = 50,
+                       limits   = c(0, 100),
+                       na.value = "grey90",
+                       name     = "Value") +
+  # Move x-axis labels to the TOP of the plot.
+  scale_x_discrete(position = "top") +
+  # Axis and plot titles.
+  labs(title = "MS90", x = NULL, y = NULL) +
+  # Clean white theme.
+  theme_bw() +
+  theme(
+    axis.text.x  = element_text(angle = 0, hjust = 0.5,
+                                vjust = 0.5, lineheight = 1.1),
+    axis.text.y  = element_text(face = "bold"),
+    panel.grid   = element_blank(),
+    plot.title   = element_text(face = "bold", hjust = 0.5)
+  )
