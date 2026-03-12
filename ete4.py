@@ -30,3 +30,14 @@ if len(target_leaves) > 1:
         print(f"{TREE_FILE}\t{CLADE_OF_INTEREST}\t{monophyly}\t{bootstrap}")
 else:
         print(f"{TREE_FILE}\t{CLADE_OF_INTEREST}\tNot_enough_leaves\tNA")
+
+
+
+Traceback (most recent call last):
+  File "/home/STUDENTI/giovanni.galassi3/01_BUSCO_RUNs/ncbi_dataset/data/prova.py", line 8, in <module>
+    t = Tree("TREE_FILE")
+  File "ete4/core/tree.pyx", line 78, in ete4.core.tree.Tree.__init__
+  File "/home/STUDENTI/giovanni.galassi3/miniconda3/envs/ncbi_datasets/lib/python3.14/site-packages/ete4/parser/extract.py", line 43, in extract_data_parser
+    data = open(data).read()  # probably a file name - open it
+           ~~~~^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'TREE_FILE'
