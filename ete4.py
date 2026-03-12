@@ -10,7 +10,7 @@ t = Tree(TREE_FILE)
 
 # 'with' statement will automatically close the file after the nested block of code. 'r' option open the file in reading mode.
 with open(TAXONOMY_FILE, 'r') as f:
-    taxonomy = dict(line.strip().split('\t') for line in f if line.count('\t') == 1)
+    taxonomy = dict(line.strip().split('\t') for line in f if line.count('\t') == 2)
         # Create a dictionary to improve the research into the treefile. The main operations on a dictionary are storing a value with some key and extracting the value given the key. Kry must be unique and immutable.
         # Build the dictionary directly by filtering and splitting valid lines to store the taxonomy mapping.
         # line.strip takes the raw line, removes blank space and divide it in a list of strings using tabs as separator. This operation generates the exactly Specie-Clade pair.
