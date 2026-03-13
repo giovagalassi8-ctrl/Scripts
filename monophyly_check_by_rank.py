@@ -11,7 +11,7 @@
 # -t, --tree : the phylogenetic tree in analysis.
 # -x, --taxonomy : the CSV file containing the taxonomy associated to every species into the tree.
 # -r, --rank : name of the taxonomic rank you want to evaluate (it has to correspond to the exact name of the column of interest).
-# -c, --clade [optional] : name of the exactly clade you want to analyse (if not specified, the script will be run on the entire rank/column specified before)
+# -c, --clade [optional] : name of the exactly clade you want to analyse (if not specified, the script will be run on the entire rank/column specified before).
 
 # USAGE:
 # ./monophyly_check_by_rank.py -t <TREE_NEWICK> -x <TAXONOMY_FILE> -r <COLUMN_OF_INTEREST> -c <CLADE>
