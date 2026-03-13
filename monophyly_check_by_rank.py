@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 
-# This script performs a monophyly check and finds the support value associated with the nodes of interest.
-# It can be used considering different taxonomic levels (those that are not present on a species tree, but which one would like to analyze).
+# This script performs a monophyly check and finds the  bootstrap support value associated with the nodes of interest.
+# It can be used considering different taxonomic ranks (those that are not present on a species tree, but which one would like to analyze).
 
 # REQUIRED FILES:
-# 1.
-# 2.
+# 1. A phylogenetic tree in Newick format;
+# 2. A CSV file containing different taxonomic ranks associated to the same species that are considered on the tree (e.g. Phylum, Class, Order, Family, Genus).
+
+# OPTIONS:
+# -t, --tree : the phylogenetic tree in analysis.
+# -x, --taxonomy : the CSV file containing the taxonomy associated to every species into the tree.
+# -r, --rank : name of the taxonomic rank you want to evaluate (it has to correspond to the exact name of the column of interest).
+# -c, --clade [optional] : name of the exactly clade you want to analyse (if not specified, the script will be run on the entire rank/column specified before)
+
+# USAGE:
+# ./monophyly_check_by_rank.py -t <TREE_NEWICK> -x <TAXONOMY_FILE> -r <COLUMN_OF_INTEREST> -c <CLADE>
 
 
 import argparse
@@ -13,7 +22,7 @@ from ete4 import Tree
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Check monophyly of a clade of interest in a phylogenetic tree."
+        description="Check monophyly and bootstrap support of a clade of interest in a phylogenetic tree."
     )
     parser.add_argument(
         "-t", "--tree",
