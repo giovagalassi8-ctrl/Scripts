@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 from ete4 import Tree
 
@@ -34,3 +36,4 @@ if len(target_leaves) >= 2:
         print(f"{TREE_FILE}\t{CLADE_OF_INTEREST}\t{monophyly}\t{bootstrap}")
 else:
         print(f"{TREE_FILE}\t{CLADE_OF_INTEREST}\tNot_enough_leaves\tNA")
+
