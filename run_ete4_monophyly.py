@@ -51,6 +51,8 @@ if args.clade:
 else:
     clades_to_test = set(taxonomy.values())
 
+print(f"Tree_file\t{args.rank}\tMonophyletic\tBootstrap")
+
 for CLADE_OF_INTEREST in clades_to_test:
     target_leaves = [leaf for leaf in t.leaves() if taxonomy.get(leaf.name) == CLADE_OF_INTEREST]
 
