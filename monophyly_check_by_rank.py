@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
 # This script performs a monophyly check and finds the support value associated with the nodes of interest.
-# It requires a tree in Newick format, on which the analysis will be performed, and a table containing every species present on the tree with the associated taxonomy. 
-# 
+# It can be used considering different taxonomic levels (those that are not present on a species tree, but which one would like to analyze).
+
+# REQUIRED FILES:
+# 1.
+# 2.
 
 
 import argparse
