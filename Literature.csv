@@ -1,0 +1,26 @@
+Taxon,Ourdataset,Struck2014,Laumer2015,Mikhailov2016,Kocot2017,Lu2017,Laumer2019,Marletaz2019,Drábková2022,Khalturin2022,Lewin2025
+Acanthocephala,y,y,n,y,n,y,y,n,y,n,n
+Annelida,y,y,y,y,y,y,y,y,y,y,y
+Brachiopoda,y,y,y,y,y,n,y,y,y,y,y
+Chaetognata,y,n,n,n,y,n,y,y,n,n,y
+Cycliophora,y,y,y,y,y,n,y,n,y,y,y
+Dicyemida,n,n,n,n,n,y,n,n,y,n,n
+Entoprocta,y,y,y,y,y,n,y,y,y,y,y
+Ectoprocta (Bryozoa),y,y,y,y,y,n,y,y,y,y,y
+Gastrotricha,y,y,y,y,y,y,y,y,y,n,y
+Gnatostomulida,y,y,n,y,y,y,y,y,y,n,n
+Micrognathozoa,y,n,n,n,n,y,y,y,y,n,y
+Mollusca,y,y,y,y,y,y,y,y,y,y,y
+Nemertea,y,y,y,y,y,n,y,y,y,y,y
+Orthonectida,n,n,n,y,n,y,n,n,y,n,n
+Phoronida,y,n,y,n,y,n,y,y,y,y,y
+Platyhelminthes,y,y,y,y,y,y,y,y,y,n,y
+Rotifera,y,y,n,y,y,y,y,y,y,n,y
+Kinorhyncha,y,n,n,y,n,n,y,n,n,n,n
+Tardigrada,y,n,y,n,n,n,y,y,n,n,y
+Onychophora,y,n,y,n,n,n,y,y,n,n,n
+Arthropoda,y,n,y,y,y,y,y,y,n,y,y
+Nematoda,y,n,y,n,n,n,y,y,n,n,n
+Priapulida,y,n,y,y,y,n,y,y,y,n,y
+Nematomorpha,y,n,n,n,n,n,y,n,n,n,n
+n° of Spiralia species,75,61,78,56,71,23,80,51,43,23,43
