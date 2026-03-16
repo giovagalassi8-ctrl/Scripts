@@ -1,0 +1,56 @@
+#!/usr/bin/env Rscript
+
+#
+
+# USAGE:
+# [Rstudio] source(lollipop_timeline_plot.R)
+
+
+library(ggplot2)
+library(tidyverse)
+library(viridis)
+
+# Read the CSV file with the interest data (change with the correct .csv file name).
+data <- read.csv("00_Data/Literature.csv", header=FALSE, stringsAsFactors = FALSE)
+
+# IF NECESSARY: transpose the dataset for a better manipulation.
+transposed_data <- as.data.frame(t(data), stringsAsFactors = FALSE)
+
+# Extract specific rows into individual vectors. Change if the data are on different columns, instead of rows.
+# In this case every row has an intestation, which is removed with [ ,-1].
+objects <- as.character(unlist(data[1,-1]))
+time <- as.numeric(unlist(data[2,-1]))
+phyla <- as.numeric(unlist(data[4,-1]))
+# The following row is extracted for color mapping.
+number_of_species <- as.numeric(unlist(data[3,-1])) 
+
+# Create the main data frame for plotting.
+data_plot <- data.frame(
+  Objects = objects,
+  Time = time,
+  Phyla = phyla,
+  Color = number_of_species
+)
+
+# Create the lollipop plot.
+# Map the 'Time' variable to the x-axis and 'Phyla' to the y-axis globally for all layers.
+lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla)) +
+  geom_segment(
+    # They start at the x-axis (y = 0) and end at the actual data point (yend = Phyla).
+    aes(x = Time, xend = Time, y = 0, yend = Phyla), 
+    color = "gray50", linewidth = 1) +
+  # Add the points at the (x, y) coordinates.
+  geom_point(aes(color = ColorValue), size = 4) + 
+  # Add text labels.
+  geom_text(aes(label = Objects), vjust = -1.5, size = 3.5, color = "black") +
+  # Apply a continuos color scale.
+  scale_color_viridis_c(option = "viridis", direction = -1, limits = c(0, 100)) +
+  # Aesthetic options.
+  labs(
+    title = "Lollipop Plot",
+    x = "Timeline",
+    y = "Number of Phyla",
+    color = "Number of Species"
+  ) +
+  theme_bw() +
+  scale_y_continuous(limits = c(0,30), breaks = seq(0,30, by = 5))
