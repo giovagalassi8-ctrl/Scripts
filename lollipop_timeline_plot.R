@@ -13,7 +13,7 @@ library(tidyverse)
 library(viridis)
 
 # Read the CSV file with the interest data (change with the correct .csv file name).
-data <- read.csv("00_Data/Literature.csv", header=FALSE, stringsAsFactors = FALSE)
+data <- read.csv("99_Paper_Plots/00_literature/00_data/Literature.csv", header=FALSE, stringsAsFactors = FALSE)
 
 # IF NECESSARY: transpose the dataset for a better manipulation.
 transposed_data <- as.data.frame(t(data), stringsAsFactors = FALSE)
@@ -42,7 +42,7 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla)) +
     aes(x = Time, xend = Time, y = 0, yend = Phyla), 
     color = "gray50", linewidth = 1) +
   # Add the points at the (x, y) coordinates.
-  geom_point(aes(color = ColorValue), size = 4) + 
+  geom_point(aes(color = Color), size = 4) + 
   # Add text labels.
   geom_text(aes(label = Objects), vjust = -1.5, size = 3.5, color = "black") +
   # Apply a continuos color scale.
@@ -52,8 +52,15 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla)) +
     title = "Lollipop Plot",
     x = "Timeline",
     y = "Number of Phyla",
-    color = "Number of Species"
+    color = "Species"
   ) +
   theme_bw() +
+  # Remove the default grid from the background.
+  theme(
+    panel.border     = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line        = element_line(colour = "black")
+  ) +
   # Set the x-axis limits.
   scale_y_continuous(limits = c(0,30), breaks = seq(0,30, by = 5))
