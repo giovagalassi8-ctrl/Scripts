@@ -42,9 +42,11 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla)) +
     aes(x = Time, xend = Time, y = 0, yend = Phyla), 
     color = "gray50", linewidth = 1) +
   # Add the points at the (x, y) coordinates.
-  geom_point(aes(color = Color), size = 4) + 
+  geom_point(
+    aes(color = Color), size = 4) + 
   # Add text labels.
-  geom_text(aes(label = Objects), vjust = -1.5, size = 3.5, color = "black") +
+  geom_text(
+    aes(label = Objects), vjust = -1.5, size = 3.5, color = "black") +
   # Apply a continuos color scale.
   scale_color_viridis_c(option = "viridis", direction = -1, limits = c(0, 100)) +
   # Plot, axis and legend titles.
