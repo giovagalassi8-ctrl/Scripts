@@ -40,7 +40,8 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla, group = Objects)) +
   geom_segment(
     aes(x = Time, y = 0, yend = Phyla), 
     color = "gray50", linewidth = 1,
-    # Divide lollipops with the same x value setting the width between the lines.
+    # 'position_dodge' preserves the vertical position of a 'geom' while adjusting the horizontal position.
+    # (In this case is useful to divide overlapping lollipops).
     position = position_dodge(width = 0.3)) +
   # Add the points at the (x, y) coordinates.
   geom_point(
