@@ -48,8 +48,8 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla, group = Objects)) +
     position = position_dodge(width = 0.3)) + 
   # Add text labels.
   geom_text(
-    aes(label = Objects), vjust = -1.5, size = 3.5, color = "black",
-    position = position_dodge(width = 0.3)) +
+    aes(label = Objects), vjust = -1, size = 3, color = "black",
+    position = position_dodge(width = 1.3)) +
   # Apply a continuos color scale.
   scale_color_viridis_c(option = "viridis", direction = -1, limits = c(0, 100)) +
   # Plot, axis and legend titles.
