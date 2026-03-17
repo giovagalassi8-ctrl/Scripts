@@ -36,17 +36,20 @@ data_plot <- data.frame(
 
 # Create the lollipop plot.
 # Map the 'Time' variable to the x-axis and 'Phyla' to the y-axis globally for all layers.
-lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla)) +
+lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla, group = Objects)) +
   geom_segment(
-    # They start at the x-axis (y = 0) and end at the actual data point (yend = Phyla).
-    aes(x = Time, xend = Time, y = 0, yend = Phyla), 
-    color = "gray50", linewidth = 1) +
+    aes(x = Time, y = 0, yend = Phyla), 
+    color = "gray50", linewidth = 1,
+    # Divide lollipops with the same x value setting the width between the lines.
+    position = position_dodge(width = 0.3)) +
   # Add the points at the (x, y) coordinates.
   geom_point(
-    aes(color = Color), size = 4) + 
+    aes(color = Color), size = 4,
+    position = position_dodge(width = 0.3)) + 
   # Add text labels.
   geom_text(
-    aes(label = Objects), vjust = -1.5, size = 3.5, color = "black") +
+    aes(label = Objects), vjust = -1.5, size = 3.5, color = "black",
+    position = position_dodge(width = 0.3)) +
   # Apply a continuos color scale.
   scale_color_viridis_c(option = "viridis", direction = -1, limits = c(0, 100)) +
   # Plot, axis and legend titles.
