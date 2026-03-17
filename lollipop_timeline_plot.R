@@ -1,6 +1,8 @@
 #!/usr/bin/env Rscript
 
-#
+# This script creates a timeline bar on which are collocated different points associated to an event (e.g. different pubblications about the same topic).
+# The hight of the different segments is based on a selected variable (e.g. the number of phyla considered in that study),
+# while the color of each point is assigned using a continuos gradient that consider a different variable (e.g. the number of species used).
 
 # USAGE:
 # [Rstudio] source(lollipop_timeline_plot.R)
@@ -45,7 +47,7 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla)) +
   geom_text(aes(label = Objects), vjust = -1.5, size = 3.5, color = "black") +
   # Apply a continuos color scale.
   scale_color_viridis_c(option = "viridis", direction = -1, limits = c(0, 100)) +
-  # Aesthetic options.
+  # Plot, axis and legend titles.
   labs(
     title = "Lollipop Plot",
     x = "Timeline",
@@ -53,4 +55,5 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla)) +
     color = "Number of Species"
   ) +
   theme_bw() +
+  # Set the x-axis limits.
   scale_y_continuous(limits = c(0,30), breaks = seq(0,30, by = 5))
