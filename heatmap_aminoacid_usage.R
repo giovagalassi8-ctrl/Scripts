@@ -17,6 +17,7 @@
 library(pheatmap)
 library(RColorBrewer)
 library(viridis)
+library(paletteer)
 
 # Read the CSV file into a data frame (change with the correct file name).
 data <- read.csv("INPUT_FILE", check.names = FALSE)  # check.names = FALSE prevents R from automatically altering column names
@@ -44,6 +45,7 @@ matrix <- as.matrix(filtered_data[, aa])
 rownames(matrix) <- gsub("_", " ", filtered_data$Taxon_name)
 
 # Define amino acid order following the Dayhoff classification.
+# Ignore if you don't want to sort amino acids in this way (you have also to set 'cluster_cols=TRUE' into heatmap script )
 dayhoff <- c(
   "A","G","P","S","T", #Aliphatic/Polar
   "C", #Cysteine
@@ -53,7 +55,8 @@ dayhoff <- c(
   "I","L","M","V" #Aliphatic/Hydrophobic
 )
 
-# Reorder the matrix columns according to the Dayhoff scheme.
+# Reorder the matrix columns according to the Dayhoff scheme. (You can also change 'dayhoff' with the 'aa' object previously created).
+# IF THE PREVIOUS STEP WAS NOT DONE, SKIP THIS COMMAND.
 matrix <- matrix[, dayhoff]
 
 # Create a dataframe with the group of each species (use later for the sidebar).
@@ -62,12 +65,13 @@ rows_annotation <- data.frame(Groups = filtered_data$Groups,
                               row.names = row.names(matrix))
 
 # Define sidebar colors. Each taxonomic group is assigned a distinct color.
-colors <- list(Groups = c("Chaetonotida"   = "#575f78",
-                          "Macrodasyida"   = "#4997A7",
-                          "Platyhelmintes" = "#8B0000"))
+colors <- list(Groups = c("Chaetonotida"   = "#BED4E9FF",
+                          "Macrodasyida"   = "#19647EFF",
+                          "Platyhelmintes" = "#FDB927FF"))
 
 # Create a continuous color gradient for the heatmap cells.
-heatmap_scale_colors <- magma(100)
+my_palette <- colorRampPalette(c("white", "black"))
+heatmap_scale_colors <- my_palette(100)
 
 # Generate the heatmap
 pheatmap(
@@ -81,7 +85,7 @@ pheatmap(
   cluster_rows = TRUE, # Boolean values determining if rows should be clustered or 'hclust' objects.
   clustering_distance_rows = "euclidean", # Distance metric used for row clustering.
   
-  cluster_cols = FALSE, # Boolean values determining if columns should be clustered or 'hclust' objects.
+  cluster_cols = FALSE, # Boolean values determining if columns should be clustered or 'hclust' objects (Set TRUE if dayhoff grouping has not been considered).
   clustering_distance_cols = "euclidean", # Distance metric used for column clustering. In this case is defined but not applied (cols not clustered).
   
   treeheight_row = 50, # The height of a tree for rows, if these are clustered.
