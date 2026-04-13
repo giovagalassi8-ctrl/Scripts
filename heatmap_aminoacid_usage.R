@@ -45,7 +45,7 @@ matrix <- as.matrix(filtered_data[, aa])
 rownames(matrix) <- gsub("_", " ", filtered_data$Taxon_name)
 
 # Define amino acid order following the Dayhoff classification.
-# Ignore if you don't want to sort amino acids in this way (you have also to set 'cluster_cols=TRUE' into heatmap script )
+# Ignore if you don't want to sort amino acids in this way (you have also to set 'cluster_cols=TRUE' into heatmap script).
 dayhoff <- c(
   "A","G","P","S","T", #Aliphatic/Polar
   "C", #Cysteine
@@ -70,6 +70,7 @@ colors <- list(Groups = c("Chaetonotida"   = "#BED4E9FF",
                           "Platyhelmintes" = "#FDB927FF"))
 
 # Create a continuous color gradient for the heatmap cells.
+# You can also use a dafault palette from the viridis library, such as 'viridis(100)' or 'magma(100)'.
 my_palette <- colorRampPalette(c("white", "black"))
 heatmap_scale_colors <- my_palette(100)
 
