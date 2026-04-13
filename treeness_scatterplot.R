@@ -12,7 +12,7 @@
 library(ggplot2)
 
 # Read the file containing the treeness and RCV values (change with the correct file path).
-data <- read.table('05_Treeness/allgenes_treeness.tsv', header = FALSE)
+data <- read.table('FILE_PATH', header = FALSE)
 # IF NECESSARY: remove the column containing the treeness/RCV value (usually the second one), which will not be represented on the graph.
 data <- data[,-2]
 
