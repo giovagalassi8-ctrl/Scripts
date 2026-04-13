@@ -4,7 +4,7 @@
 # In particular, the treeness (measure of the proportion of the total tree length (sum of all branch lengths) that is found on internal branches) is represented on the x-axis, 
 # while the Relative Composition Variability (RCV, measure of the average variability in sequence composition among taxa in a sequence alignment) is represented on the y-axis.
 # Higher values of treeness/RCV (high treeness, low RCV) are desirable, as they indicate that a gene is likely to be less susceptible to systematic biases.
-# Considering this ratio it is possible to see which is the model that presents the least bias.
+# Considering this ratio it is possible to see which is the model that presents the least bias: it can be useful for evaluating which model is best among the various ones used to create trees.
 
 # USAGE:
 # [Rstudio] source("treeness_scatterplot.R")
@@ -21,11 +21,11 @@ colnames(data)[2] <- "treeness"
 colnames(data)[3] <- "RCV"
 
 # Create a vector containing the objects belonging to the model you want to highlight on the graph.
-# In this case the vector contains the objects belonging to the model with the best treeness/RCV ratio (change if necessary).
-kpic <- data[c(16:18),]
+# In this case the vector contains the objects belonging to the model  assumed to be the one with with the best treeness/RCV ratio (change if necessary).
+kpic <- data[c(49:57),]
 
 # Assigns a color to the selected objects in the previous vector to highlight them in the graph.
-color <- ifelse(data$V1 %in% kpic$V1, "red", "lightgrey")
+color <- ifelse(data$V1 %in% kpic$V1, "red", "black")
 
 # Create the scatterplot.
 p <- ggplot(data, aes(
