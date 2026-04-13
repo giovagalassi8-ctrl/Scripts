@@ -38,11 +38,12 @@ p <- ggplot(data, aes(
     alpha = 0.85,
     col = color
     ) +
-  # Add a bisector to the graph.
-  geom_abline(
-    intercept = 0,
-    slope = 1,
-    ) +
+  # Add four quadrants to the graph.
+  geom_vline(xintercept = 0.235) +
+  geom_hline(yintercept = 0.235) +
+  
+  # If you want to add a bisector to the graph, use 'geom_abline(intercept = 0, slope = 1,) +
+
   # Fix the aspect ratio so that 1 unit on the x-axis equals 1 unit on the y-axis.
   coord_fixed(ratio = 1) +
   # Add a black and white theme. 
