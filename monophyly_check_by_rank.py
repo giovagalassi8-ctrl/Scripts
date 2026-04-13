@@ -4,8 +4,9 @@
 # It can be used considering different taxonomic ranks (those that are not present on a species tree, but which one would like to analyze).
 
 # REQUIRED FILES:
-# 1. A phylogenetic tree in Newick format;
-# 2. A CSV file containing different taxonomic ranks associated to the same species that are considered on the tree (e.g. Phylum, Class, Order, Family, Genus).
+# 1. A phylogenetic tree in Newick format (it is preferable if the tree is rooted using 'phykit root_tree');
+# 2. A CSV file containing different taxonomic ranks associated to the same species that are considered on the tree (e.g. Phylum, Class, Order, Family, Genus). 
+# To create this taxonomy file, you can use 'datasets download taxonomy taxon' inserting the NCBI taxonID of the species present between "" .
 
 # OPTIONS:
 # -t, --tree : the phylogenetic tree in analysis.
