@@ -13,7 +13,7 @@ library(tidyverse)
 library(viridis)
 
 # Read the CSV file with the interest data (change with the correct .csv file name).
-data <- read.csv("99_Paper_Plots/00_literature/00_data/Literature.csv", header=FALSE, stringsAsFactors = FALSE)
+data <- read.csv("INPUT_FILE", header=FALSE, stringsAsFactors = FALSE)
 
 # IF NECESSARY: transpose the dataset for a better manipulation.
 transposed_data <- as.data.frame(t(data), stringsAsFactors = FALSE)
