@@ -5,45 +5,42 @@
 # while the Relative Composition Variability (RCV, measure of the average variability in sequence composition among taxa in a sequence alignment) is represented on the y-axis.
 # Higher values of treeness/RCV (high treeness, low RCV) are desirable, as they indicate that a gene is likely to be less susceptible to systematic biases.
 # Considering this ratio it is possible to see which is the model that presents the least bias: it can be useful for evaluating which model is best among the various ones used to create trees.
+# In the final part of the script it is possible to add two density plot (or any kind of plot you desire).
 
 # USAGE:
 # [Rstudio] source("treeness_scatterplot.R")
 
+
 library(ggplot2)
+library(patchwork)
 
 # Read the file containing the treeness and RCV values (change with the correct file path).
-data <- read.table('FILE_PATH', header = FALSE)
-# IF NECESSARY: remove the column containing the treeness/RCV value (usually the second one), which will not be represented on the graph.
-data <- data[,-2]
-
-# Change column names for clarity.
-colnames(data)[2] <- "treeness"
-colnames(data)[3] <- "RCV"
-
-# Create a vector containing the objects belonging to the model you want to highlight on the graph.
-# In this case the vector contains the objects belonging to the model  assumed to be the one with with the best treeness/RCV ratio (change if necessary).
-kpic <- data[c(49:57),]
-
-# Assigns a color to the selected objects in the previous vector to highlight them in the graph.
-color <- ifelse(data$V1 %in% kpic$V1, "red", "black")
+data <- read.table('INPUT_TSV_FILE', header = TRUE)
 
 # Create the scatterplot.
 p <- ggplot(data, aes(
-    x=treeness, # Treeness value on the x-axis.
-    y=RCV # RCV value on the y-axis.
-    ))+
+  x=Treeness,  # Treeness value on the x-axis.
+  y=RCV,  # RCV value on the y-axis.
+  fill = meansupport  # Color each point based on the selected statistic (change as desired with the column name containing the selected stats).
+))+
   # Draw the points on the graph.
   geom_point(
-    size = 2.5,
-    alpha = 0.85,
-    col = color
-    ) +
+    size = 4.5,
+    alpha = 1,
+    shape = 21,  # The shape 21 is the one where points have a border.
+    colour = "black",  # The color is referred to the border of the points.
+    stroke = 1  # Set border width.
+  ) +
+  # Creates a color gradient to fill the points based on the selected value.
+  scale_fill_steps(
+    low = "white", 
+    high = "darkred",
+    breaks = c(94:100),  # Set the number of colors that constitute the gradient (change accordingly).
+    labels = c("94", "", "", "", "", "", "100")  # Display only these values on the legend (change accordingly).
+      ) +
   # Add four quadrants to the graph.
   geom_vline(xintercept = 0.235) +
   geom_hline(yintercept = 0.235) +
-  
-  # If you want to add a bisector to the graph, use 'geom_abline(intercept = 0, slope = 1,) +
-
   # Fix the aspect ratio so that 1 unit on the x-axis equals 1 unit on the y-axis.
   coord_fixed(ratio = 1) +
   # Add a black and white theme. 
@@ -55,13 +52,44 @@ p <- ggplot(data, aes(
   labs(
     x = "Treeness",
     y = "Relative Composition Variability (RCV)",
-    col = NULL
+    fill = "Mean Support"
   ) +
   # Remove background grid and add a legend.
   theme(
     panel.grid.minor = element_blank(),
-    panel.grid.major = element_line(color = "gray90"),
+    panel.grid.major = element_line(color = "lightgrey"),
     axis.text = element_text(color = "black"),
     legend.position = "top",
-    legend.text = element_text(size = 12)
+    legend.text = element_text(size = 10)
   )
+
+
+# The following part can be done in case you want to add other graphs, containing other statistics, to the plot.
+# Change plot type and statistics considered as you want.
+
+# Create the density plot for the mean support for the final plot.
+a <- ggplot(data, aes(meansupport)) + 
+  geom_density(linewidth = 1) +
+  theme_minimal() +
+  scale_x_continuous(limits = c(90,100)) +
+  labs(
+    x = "Mean support",
+    y = "density"
+  )
+
+# Create the density plot for the mean branch lenght for the final plot.
+b <- ggplot(data, aes(meanbrlen)) + 
+  geom_density(linewidth = 1) +
+  theme_minimal() +
+  scale_x_continuous(limits = c(0,0.5)) +
+  labs(
+    x = "Mean branch length",
+    y = "density"
+  )
+
+# Merge the two density plot so that they are one above the other.
+c <- a/b
+
+# Combines the scatterplot with the two density plot.
+# In the final graph the scatterplot will be on the left, while the two density plot are on the right.
+final_plot <- p-c
