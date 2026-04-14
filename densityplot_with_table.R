@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 
 # This script visualizes phylogenetic tree metrics by generating combined density and dot plots for Mean Branch Length, Sum Branch Length, and Mean Support.
+# These statistics could be obtained using 'gotree stats' command.
 # It reads data from text files, builds individual plots with custom themes, and finally combines them into a single layout. 
 # Optionally, it computes and appends summary statistics tables next to each corresponding plot.
 
@@ -13,11 +14,14 @@ library(patchwork)
 library(gridExtra)
 
 # Create all the objects for the density plot.
+# In this case three statistics were considered for the final plot, 
+# but it is also possible to do the density plot for a different number of statistics (in this case change accordingly). 
 meanbrlength <- read.table("gotree_meanbrlenght.txt", header = FALSE, col.names = c("Model", "MeanBranchLength"))
 sumbrlength <- read.table("gotree_sumbrlenght.txt", header = FALSE, col.names = c("Model", "SumBranchLength"))
 meansupport <- read.table("gotree_meansupport.txt", header = FALSE, col.names = c("Model", "MeanSupport"))
 
 # Create the density plots.
+# (If a different number of statistics is consideres, change accordingly).
 density_plot <- ggplot(meanbrlength, aes(x = MeanBranchLength)) +
   geom_density( aes(y = after_stat(scaled)*0.4), fill = "#008080", alpha = 0.4, color = "darkslategray", bounds = c(0, 1)) +
   geom_dotplot(fill = "black", alpha = 0.8, binwidth = 0.005, dotsize = 1, method = "histodot") +
