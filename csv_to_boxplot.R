@@ -1,9 +1,7 @@
 #!/usr/bin/env Rscript
 
-# This script reads a CSV file containing different data from different species (each one associated to an higher taxonomic group).
+# This script reads a CSV file containing different data from different species (each one associated to an higher taxonomic group, e.g. Phylum).
 # It produces a boxplot visualizing the distribution of the selected statistic using ggplot2, with custom colors and clean formatting.
-
-# IMPORTANT: Before launching it, check that the file is in .csv format.
 
 # USAGE:
 # [Rstudio] source(boxplot_with_table.R)
@@ -32,10 +30,11 @@ ggplot(data = data,aes(
   # Manually assign fill colors to each taxonomic group.
   scale_fill_manual(
     # Each named value maps a group label to a specific color.
+    # In the following example, we considered two Gastrotrichs orders and the phylum Platyhelmintes: change accordingly to your data.
     values = c("Chaetonotida" = "blue", "Macrodasyida" = "darkgreen", "Platyhelmintes" = "red")
   ) +
   
-  # Set axis and legend labels:
+  # Set axis and legend labels (change as you desire).
   labs(
     x = "Taxonomic group",
     y = "Missing Percent (%)",
