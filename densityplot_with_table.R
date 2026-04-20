@@ -87,7 +87,7 @@ create_summary_table <- function(numeric_vector) {
   stats <- summary(numeric_vector)
   df <- data.frame(
     Statistic = names(stats),
-    Value = round(as.numeric(stats), 3) # Round to 3 decimals for readability
+    Value = round(as.numeric(stats), 3)  #Round to 3 decimals for readability.
   )
   return(df)
 }
