@@ -1,17 +1,16 @@
 # !/usr/bin/env Rscript
 
-# This script takes the result of gotree analysis on monophyly (in csv format) 
-# to create a costum heatmap where the various squares are separated from each other.
+# This script takes the result of gotree analysis on monophyly (in csv format)
+# to create a costum heatmap where the various squares indicates whether the group is monophyletic or not.
 
 # USAGE:
 # [Rstudio] source(monophyly_heatmap_gotree)
 
 
-# Load required packages
 library(ggplot2)
 library(tidyr)
 
-# Import the CSV file
+# Import the CSV file.
 monophyly <- read.csv("INPUT_FILE", stringsAsFactors = FALSE)
 
 # The ggplot2 library strictly requires that data be organized in a "long" format, where each column represents a single logical variable.
@@ -19,9 +18,9 @@ monophyly <- read.csv("INPUT_FILE", stringsAsFactors = FALSE)
 # Using ggplot2 is mandatory to switch from "matrix" to "3-column" shape.
 monophyly_long <- pivot_longer(monophyly, cols = -Tree, names_to = "Group", values_to = "Status")
 
-# Generate the heatmap
+# Generate the heatmap.
 heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group, 
-                                           #Set the fill color of the tiles based on the 'Status' column, treating it as character.
+                                           # Set the fill color of the tiles based on the 'Status' column, treating it as character.
                                            fill = as.character(Status))) +  
   # Add a layer to draw rectangles (tiles) for each data point.
   geom_tile(color = "black", width = 0.85, height = 0.85) +
@@ -36,11 +35,11 @@ heatmap_plot <- ggplot(monophyly_long, aes(x = Tree, y = Group,
   theme_void() + 
   theme(
   # Customize the text of the top x-axis.
-  axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5),  # To remove all the names on the x-axis change with 'element_blank()'
-  # Customize the text of the y-axis
+  axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5),  # To remove all the names on the x-axis change with 'element_blank()' .
+  # Customize the text of the y-axis.
   axis.text.y = element_text(hjust = 1, margin = margin(r = 5))
-  # Center the title relative to the entire plot area
+  # Center the title relative to the entire plot area.
   plot.title.position = "plot",
-  # Edit the title  
+  # Edit the title.
   plot.title = element_text(hjust = 0.5, face = "bold", margin = margin(b = 1))
   )
