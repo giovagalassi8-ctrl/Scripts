@@ -8,7 +8,7 @@
 # IMPORTANT:
 # Make sure the data is normalized before launching the script; 
 # in this case the various amino acid frequencies have been normalized using the following command for each amino acid (columns):
-# data <- transform(data, 'column name' = ('column name' / ))
+# data <- transform(data, 'column name' = ('column name' / Sum_Aminoacid))
 # In particular, we divide each value for the total amino acid usage of the specie (sum of every value on the same row).
 
 # USAGE:
@@ -65,7 +65,7 @@ rows_annotation <- data.frame(Groups = filtered_data$Groups,
                               # row.names ensures the annotation aligns correctly with the heatmap rows.
                               row.names = row.names(matrix))
 
-# Define sidebar colors. Each taxonomic group is assigned a distinct color.
+# Define sidebar colors. Each taxonomic group is assigned a distinct color (change with your considered groups).
 colors <- list(Groups = c("Chaetonotida"   = "#BED4E9FF",
                           "Macrodasyida"   = "#19647EFF",
                           "Platyhelmintes" = "#FDB927FF"))
