@@ -8,7 +8,8 @@
 # IMPORTANT:
 # Make sure the data is normalized before launching the script; 
 # in this case the various amino acid frequencies have been normalized using the following command for each amino acid (columns):
-# data <- transform(data, 'column name' = ('column name' - min('column name', na.rm = TRUE)) / (max('column name', na.rm = TRUE) - min('column name', na.rm = TRUE))))
+# data <- transform(data, 'column name' = ('column name' / ))
+# In particular, we divide each value for the total amino acid usage of the specie (sum of every value on the same row).
 
 # USAGE:
 # [Rstudio] source(heatmap_aminoacid_frequencies.R)
