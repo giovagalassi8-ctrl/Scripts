@@ -2,7 +2,7 @@ library(ggplot2)
 library(dplyr)
 
 #Import data
-data <- read.csv("all_results_final2.csv", header = TRUE)
+data <- read.csv("final1.csv", header = TRUE)
 
 #Filters the data while keeping only the columns of interest :
 # -Name of the trees,
@@ -16,7 +16,7 @@ df <- data[,c(1,2,5,6)]
 df <- df |>
   mutate(tree_label = source_tree |>
            # Remove the Prefix (change accordingly).
-           gsub("ML_MS80_", "", x = _) |>
+           gsub("rooted_ML_MS80_", "", x = _) |>
            # Remove the extension (change accordingly).
            gsub("\\.treefile", "", x = _))
 
@@ -34,9 +34,11 @@ df <- df |>
                                      )),
     Grouping   = factor(Grouping,
                         levels = order)  # Set the elements on the y-axis based on the order previously defined (if you want an alphabetical order, change with "sort(unique(Grouping)").
-                                      )
+    )
 
-# Create the plot.
+# THERE ARE 2 TYPES OF POSSIBLE PLOTS:
+
+# 1. Create the plot WITH MONOPHYLY CELLS FILLED WITH SUPPORT VALUES.
 p <- ggplot(df, aes(
   x = tree_label,
   y = Grouping)
@@ -57,7 +59,7 @@ p <- ggplot(df, aes(
   # Fill these cells with a "X" (to better indicate that they are not monophyletic).
   geom_text(data = filter(df, 
                           # If there are also paraphyletic clades, change with "Category %in% c("Paraphyletic", "Polyphyletic"))," .
-                          Category == "Polyphyletic"),
+                          Category %in% c("Paraphyletic", "Polyphyletic")),
             label = "X",
             size = 1.8,
             color = "white") +
@@ -80,9 +82,67 @@ p <- ggplot(df, aes(
   coord_fixed() +
   # Add a minimal theme to the graph.
   theme_minimal(base_size = 8) +
+  scale_x_discrete(position = "top") +
   # Set the axis elements.
   theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 6),
+    axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5, size = 6),
     axis.text.y = element_text(size = 6),
     panel.grid = element_blank(),
+  )
+
+
+# 2. Create the plot WITH A COLOR GRADIENT CORRESPONDING TO THE SUPPORT VALUE.
+# Ensure the Support column is treated as numeric for the continuous gradient
+df$Support <- as.numeric(df$Support)
+
+# Create the plot
+d <- ggplot(df, aes(x = tree_label, y = Grouping)) +
+  
+  # Set a light gray background on all boxes (for NA values)
+  geom_tile(
+    fill = "grey85",
+    color = "white",
+    linewidth = 0.3
+  ) +
+  
+  # Set a dark gray background on the boxes corresponding to Paraphyletic/Polyphyletic groups
+  geom_tile(
+    data = filter(df, Category %in% c("Paraphyletic", "Polyphyletic")),
+    fill = "rosybrown",
+    color = "white",
+    linewidth = 0.3
+  ) +
+  
+  # Map the fill color to the Support value for Monophyletic groups
+  geom_tile(
+    data = filter(df, Category == "Monophyletic"),
+    aes(fill = Support),  # Replaces the fixed fill color
+    color = "white",
+    linewidth = 0.3
+  ) +
+  
+  # Apply a continuous blue color scale (from light to dark)
+  scale_fill_gradient(
+    low = "lightblue",   # Color for the lowest support values
+    high = "darkblue",   # Color for the highest support values
+    name = "Support",
+    na.value = "transparent" # Ensures it doesn't overwrite the NA background
+  ) +
+  
+  # Add the labels to the axis 
+  # (they have been removed so as not to cause confusion. If you want, add it).
+  labs(x = NULL, y = NULL) +
+  # Makes cells exactly square.
+  coord_fixed() +
+  # Add a minimal theme to the graph.
+  theme_minimal(base_size = 8) +
+  scale_x_discrete(position = "top") +
+  # Set the axis elements.
+  theme(
+    axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5, size = 6),
+    axis.text.y = element_text(size = 6),
+    panel.grid = element_blank(),
+    legend.position = "right",
+    legend.title = element_text(size = 8, face = "bold"),
+    legend.text = element_text(size = 7)
   )
