@@ -1,16 +1,26 @@
-# !/bin/env R
+# !/bin/env Rscript
+
+# This script reads a CSV file containing the monophyly status and the support value for each taxonomic group of interest within the phylogenetic trees considered,
+# and creates an heatmap that allows you to visualize the monophyly of each group. On the x-axis of the graph every phylogenetic trees will be reported, while on
+# the y-axis there will be all taxonomic groups.
+# I suggest for the imput file to use MonoPhylo.py, that creates a tsv file with all the necessary parameters, but every script that returns the same output is fine:
+# it's just important that this file has this expected columns: Tree Name, Taxonomic Group, Monophyly Status and Support Value.
+
+# USAGE:
+# [Rstudio] source(heatmap_allgroups_monophyly.R)
+
 
 library(ggplot2)
 library(dplyr)
 
-#Import data
-data <- read.csv("final1.csv", header = TRUE)
+#Import CSV file
+data <- read.csv("INPUT_FILE", header = TRUE)
 
 #Filters the data while keeping only the columns of interest :
 # -Name of the trees,
 # -Taxonomy,
 # -Identification of the monophyly,
-# -Support
+# -Support.
 df <- data[,c(1,2,5,6)]
 
 # Add a column and create the simplified labels for the final graph.
