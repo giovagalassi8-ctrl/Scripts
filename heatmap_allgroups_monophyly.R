@@ -13,14 +13,15 @@
 library(ggplot2)
 library(dplyr)
 
-#Import CSV file
+# Read the CSV file with the interest data (change with the correct .csv file name).
 data <- read.csv("INPUT_FILE", header = TRUE)
 
-#Filters the data while keeping only the columns of interest :
-# -Name of the trees,
-# -Taxonomy,
-# -Identification of the monophyly,
-# -Support.
+# Filters the data while keeping only the columns of interest :
+# -Tree Name,
+# -Taxonomic Group,
+# -Monophyly Status,
+# -Support Value.
+# Change with the correct column number.
 df <- data[,c(1,2,5,6)]
 
 # Add a column and create the simplified labels for the final graph.
@@ -32,29 +33,61 @@ df <- df |>
            # Remove the extension (change accordingly).
            gsub("\\.treefile", "", x = _))
 
-clade <- c("Lophotrochozoa","Gnathifera","Rouphozoa","Ecdysozoa","Trochozoa","Chaetognathifera","Tetraneuralia","Kryptrochozoa")
+# Use this line ONLY if you want to remove all the lines where Category has NA across ALL trees in the graph.
+df <- df |>
+  group_by(Grouping) |>
+  filter(!all(is.na(Category))) |>
+  ungroup()
 
-other_clade <- sort(unique(df$Grouping))
+# Creates a vector to order the taxonomic groups on the y-axis.
+# Change with your groups or skip to use a random oreder.
+taxa_vector <- c(
+  "Acanthocephala", "Annelida", "Arthropoda", "Brachiopoda", "Bryozoa", 
+  "Chaetognatha", "Cycliophora", "Entoprocta", "Gastrotricha", "Gnathostomulida", 
+  "Kinorhyncha", "Micrognathozoa", "Mollusca", "Nematoda", "Nematomorpha", 
+  "Nemertea", "Onychophora", "Phoronida", "Platyhelminthes", "Priapulida", 
+  "Rotifera", "Tardigrada",
+  
+  "Annelida+Brachiopoda+Phoronida", "Annelida+Brachiopoda+Phoronida+Mollusca", 
+  "Annelida+Nemertea", "Annelida+Nemertea+Brachiopoda+Phoronida", 
+  "Brachiopoda+Phoronida", "Entoprocta+Cycliophora", "Mollusca+Brachiopoda+Phoronida", 
+  "Mollusca+Nemertea", "Platyzoa+Entoprocta+Cycliophora", "Platyzoa+Polyzoa", 
+  "Trochozoa+Bryozoa", "Trochozoa+Entoprocta+Cycliophora", "Trochozoa+Polyzoa",
+  
+  "Eutrochozoa", "Lophophorata", "Platytrochozoa", "Platyzoa", "Polyzoa", 
+  "Kryptrochozoa", "Tetraneuralia", "Chaetognathifera", "Trochozoa", 
+  "Ecdysozoa", "Rouphozoa", "Gnathifera", "Lophotrochozoa")
 
-order <- c(clade, setdiff(other_clade, clade))
   
 # Set the order in which the labels will appear on the axis.
 df <- df |>
   mutate(
-    tree_label = factor(tree_label, 
-                        levels = rev(unique(tree_label)  # Set the elements on the x-axis on alphabetical order.
-                                     )),
+    # Set the elements on the x-axis based on the defined classification (in this case: allgenes, rcv and lb). 
+    block = case_when(
+      grepl("allgenes", tree_label) ~ 1,
+      grepl("rcv",      tree_label) ~ 2,
+      grepl("lb",       tree_label) ~ 3,
+      TRUE                          ~ 4
+    ),
+    # Set the elements on the x-axis in alphabetical order accordingly to the previously created groups.
+    # If you don't want this grouping, change with 'tree_label = factor(tree_label, levels = rev(unique(tree_label)' and ignore the 'block =' line
+    tree_label = factor(tree_label,
+                        levels = unique(tree_label[order(block, tree_label)])),
+
+    # Set the elements on the y-axis based on the order previously defined.
     Grouping   = factor(Grouping,
-                        levels = order)  # Set the elements on the y-axis based on the order previously defined (if you want an alphabetical order, change with "sort(unique(Grouping)").
-    )
+                        levels = taxa_vector))
+
 
 # THERE ARE 2 TYPES OF POSSIBLE PLOTS:
 
 # 1. Create the plot WITH MONOPHYLY CELLS FILLED WITH SUPPORT VALUES.
 p <- ggplot(df, aes(
   x = tree_label,
-  y = Grouping)
-  )+
+  # This line sets the y-axis by redefining the order of the Grouping levels in reverse.
+   y = factor(Grouping,
+             levels = rev(levels(factor(Grouping))))
+)) +
   
   # Sets a light gray background on all boxes; 
   # it will then be kept only in those whose value is NA.
@@ -108,16 +141,22 @@ p <- ggplot(df, aes(
 df$Support <- as.numeric(df$Support)
 
 # Create the plot
-d <- ggplot(df, aes(x = tree_label, y = Grouping)) +
+d <- ggplot(df, aes(
+  x = tree_label,
+  # This line sets the y-axis by redefining the order of the Grouping levels in reverse.
+   y = factor(Grouping,
+             levels = rev(levels(factor(Grouping))))
+)) +
   
-  # Set a light gray background on all boxes (for NA values)
+  # Sets a light gray background on all boxes; 
+  # it will then be kept only in those whose value is NA.
   geom_tile(
     fill = "grey85",
     color = "white",
     linewidth = 0.3
   ) +
   
-  # Set a dark gray background on the boxes corresponding to Paraphyletic/Polyphyletic groups
+  # Sets a dark gray background on the boxes corresponding to paraphyletic or polyphyletic groups.
   geom_tile(
     data = filter(df, Category %in% c("Paraphyletic", "Polyphyletic")),
     fill = "rosybrown",
@@ -125,7 +164,7 @@ d <- ggplot(df, aes(x = tree_label, y = Grouping)) +
     linewidth = 0.3
   ) +
   
-  # Map the fill color to the Support value for Monophyletic groups
+  # Map the fill color to the Support value for Monophyletic groups.
   geom_tile(
     data = filter(df, Category == "Monophyletic"),
     aes(fill = Support),  # Replaces the fixed fill color
@@ -133,15 +172,15 @@ d <- ggplot(df, aes(x = tree_label, y = Grouping)) +
     linewidth = 0.3
   ) +
   
-  # Apply a continuous blue color scale (from light to dark)
+  # Apply a continuous blue color scale (from light to dark).
   scale_fill_gradient(
-    low = "lightblue",   # Color for the lowest support values
-    high = "darkblue",   # Color for the highest support values
+    low = "lightblue",   # Color for the lowest support values.
+    high = "darkblue",   # Color for the highest support values.
     name = "Support",
-    na.value = "transparent" # Ensures it doesn't overwrite the NA background
+    na.value = "transparent"  # Ensures it doesn't overwrite the NA background.
   ) +
   
-  # Add the labels to the axis 
+  # Add the labels to the axis. 
   # (they have been removed so as not to cause confusion. If you want, add it).
   labs(x = NULL, y = NULL) +
   # Makes cells exactly square.
