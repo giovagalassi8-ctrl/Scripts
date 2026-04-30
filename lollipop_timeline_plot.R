@@ -31,8 +31,7 @@ data_plot <- data.frame(
   Objects = objects,
   Time = time,
   Phyla = phyla,
-  Color = number_of_species
-)
+  Species = number_of_species)
 
 # Create the lollipop plot.
 # Map the 'Time' variable to the x-axis and 'Phyla' to the y-axis globally for all layers.
@@ -45,7 +44,11 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla, group = Objects)) +
     position = position_dodge(width = 0.3)) +
   # Add the points at the (x, y) coordinates.
   geom_point(
-    aes(color = Color), size = 4,
+    # In this case, the points have a default size and a different colour depending on the number of species in the dataset.
+    # If you want to change the size of the points based on the number of species, change the following line with this:
+    # aes(size = Species), shape = 21, color = "black", fill = "orange"
+    aes(color = Species), size = 4,
+    # Prevents points from overlapping.
     position = position_dodge(width = 0.3)) + 
   # Add text labels.
   geom_text(
