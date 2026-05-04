@@ -58,7 +58,15 @@ taxa_vector <- c(
   "Kryptrochozoa", "Tetraneuralia", "Chaetognathifera", "Trochozoa", 
   "Ecdysozoa", "Rouphozoa", "Gnathifera", "Lophotrochozoa")
 
-  
+# If you want to order the x-axis based on the number of monophyletic groups per matrix, 
+# create the following object.
+mono_order <- df |>
+  filter(Category == "Monophyletic") |>
+  # Avoid duplicates.
+  distinct(tree_label, Grouping) |> 
+  count(tree_label, name = "n_mono") |>
+  arrange(n_mono)
+
 # Set the order in which the labels will appear on the axis.
 df <- df |>
   mutate(
@@ -70,10 +78,11 @@ df <- df |>
       TRUE                          ~ 4
     ),
     # Set the elements on the x-axis in alphabetical order accordingly to the previously created groups.
-    # If you don't want this grouping, change with 'tree_label = factor(tree_label, levels = rev(unique(tree_label)' and ignore the 'block =' line
+    # If you don't want this grouping, change with 'tree_label = factor(tree_label, levels = rev(unique(tree_label)' and ignore the 'block =' line.
+    # If you want to order the matrices labels based on the number of monophyletic groups, change with 'tree_label = factor(tree_label, levels = mono_order$tree_label),' the next command line.
     tree_label = factor(tree_label,
                         levels = unique(tree_label[order(block, tree_label)])),
-
+    
     # Set the elements on the y-axis based on the order previously defined.
     Grouping   = factor(Grouping,
                         levels = taxa_vector))
