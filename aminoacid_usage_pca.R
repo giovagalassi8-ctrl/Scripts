@@ -1,6 +1,7 @@
-#!/bin/env/Rscript
+#!/usr/bin/env/ Rscript
 
-#
+# This script performs a Preincipal Component Analysis using the amino acid frequencies (previously normalized) of the species under study.
+# 
 
 # USAGE:
 # [Rstudio] source(aminoacid_usage_pca.R)
