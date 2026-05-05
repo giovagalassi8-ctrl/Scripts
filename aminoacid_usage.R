@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
-# This script generates a heatmap using the amino acid frequencies of the species under study.
-# Amino acids are grouped based on the Dayhoff6 classification.
+# This script generates a heatmap using the amino acid frequencies (previously normalized) of the species under study.
+# Amino acids are grouped based on the Dayhoff6 classification, but you can set a random order or an arbitrary one.
 # Species (row) are hierarchically clustered using the Ward.D2 method on Euclidean distances. 
 # A color sidebar annotates each species by its taxonomic group.
 
@@ -9,10 +9,10 @@
 # Make sure the data is normalized before launching the script; 
 # in this case the various amino acid frequencies have been normalized using the following command for each amino acid (columns):
 # data <- transform(data, 'column name' = ('column name' / Sum_Aminoacid))
-# In particular, we divide each value for the total amino acid usage of the specie (sum of every value on the same row).
+# In particular, we divide each value for the total amino acid usage of the specie (sum of every value on the same row: so, the sum of every row's value equals 1).
 
 # USAGE:
-# [Rstudio] source(heatmap_aminoacid_frequencies.R)
+# [Rstudio] source(aminoacid_usage.R)
 
 
 library(pheatmap)
