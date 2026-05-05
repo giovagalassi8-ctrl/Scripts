@@ -1,7 +1,8 @@
 #!/usr/bin/env/ Rscript
 
-# This script performs a Preincipal Component Analysis using the amino acid frequencies (previously normalized) of the species under study.
-# 
+# This script performs a Preincipal Component Analysis using the amino acid frequencies (previously normalized) of the species under study,
+# allowing you to visualize and identify grouping patterns.
+# It is important to associate the PCA with a statistical test (in some papers about aminoacidic frequencies was used a PERMANOVA).
 
 # USAGE:
 # [Rstudio] source(aminoacid_usage_pca.R)
