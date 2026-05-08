@@ -51,11 +51,12 @@ taxa_vector <- c(
   "Annelida+Brachiopoda+Phoronida", "Annelida+Brachiopoda+Phoronida+Mollusca", 
   "Annelida+Nemertea", "Annelida+Nemertea+Brachiopoda+Phoronida", 
   "Brachiopoda+Phoronida", "Entoprocta+Cycliophora", "Mollusca+Brachiopoda+Phoronida", 
-  "Mollusca+Nemertea", "Platyzoa+Entoprocta+Cycliophora", "Platyzoa+Polyzoa", 
+  "Mollusca+Nemertea", "Mollusca+Brachiopoda+Phoronida+Nemertea", "Nemertea+Brachiopoda+Phoronida", 
+  "Platyzoa+Entoprocta+Cycliophora", "Platyzoa+Polyzoa", 
   "Trochozoa+Bryozoa", "Trochozoa+Entoprocta+Cycliophora", "Trochozoa+Polyzoa",
   
   "Eutrochozoa", "Lophophorata", "Platytrochozoa", "Platyzoa", "Polyzoa", 
-  "Kryptrochozoa", "Tetraneuralia", "Chaetognathifera", "Trochozoa", 
+  "Kryptrochozoa", "Tetraneuralia", "Chaetognathifera", "Trochozoa", "Syndermata",
   "Ecdysozoa", "Rouphozoa", "Gnathifera", "Lophotrochozoa")
 
 # If you want to order the x-axis based on the number of monophyletic groups per matrix, 
