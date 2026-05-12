@@ -79,6 +79,11 @@ heatmap_scale_colors <- my_palette(100)
 pheatmap(
   mat = matrix,
   color = heatmap_scale_colors,
+
+  # Set the dimension of the cells in the heatmap.
+  # If left as NA, then the values depend on the size of plotting window.
+  cellwidth = NA,
+  cellheight = 7,
   
   # Select the agglomeration method to be used.
   # Other options are: "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC), "centroid" (= UPGMC).
