@@ -51,7 +51,7 @@ taxa_vector <- c(
   "Annelida+Brachiopoda+Phoronida", "Annelida+Brachiopoda+Phoronida+Mollusca", 
   "Annelida+Nemertea", "Annelida+Nemertea+Brachiopoda+Phoronida", 
   "Brachiopoda+Phoronida", "Entoprocta+Cycliophora", "Mollusca+Brachiopoda+Phoronida", 
-  "Mollusca+Nemertea", "Mollusca+Brachiopoda+Phoronida+Nemertea", "Nemertea+Brachiopoda+Phoronida", 
+  "Mollusca+Nemertea", "Mollusca+Brachiopoda+Phoronida+Nemertea", 
   "Platyzoa+Entoprocta+Cycliophora", "Platyzoa+Polyzoa", 
   "Trochozoa+Bryozoa", "Trochozoa+Entoprocta+Cycliophora", "Trochozoa+Polyzoa",
   
