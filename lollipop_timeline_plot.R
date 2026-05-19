@@ -62,7 +62,7 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla, group = Objects)) +
     title = "Lollipop Plot",
     x = "Timeline",
     y = "Number of Phyla",
-    color = "Species"  # Ignore if size represent the number of species.
+    color = "Species"  # Change with size = "Species" if size is chosen to instead of colours.
   ) +
   theme_bw() +
   # Remove the default grid from the background.
