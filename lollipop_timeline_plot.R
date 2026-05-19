@@ -55,13 +55,14 @@ lollipop_plot <- ggplot(data_plot, aes(x = Time, y = Phyla, group = Objects)) +
     aes(label = Objects), vjust = -1, size = 3, color = "black",
     position = position_dodge(width = 1.3)) +
   # Apply a continuos color scale.
+  # Ignore if the size represent the number of species.
   scale_color_viridis_c(option = "viridis", direction = -1, limits = c(0, 100)) +
   # Plot, axis and legend titles.
   labs(
     title = "Lollipop Plot",
     x = "Timeline",
     y = "Number of Phyla",
-    color = "Species"
+    color = "Species"  # Ignore if size represent the number of species.
   ) +
   theme_bw() +
   # Remove the default grid from the background.
