@@ -26,13 +26,13 @@ if [ "$#" -lt 4 ]; then
     exit 1
 fi
 
-REF="$1"          # Reference FASTA
-SR1="$2"          # Short Read R1
-SR2="$3"          # Short Read R2
-LR="$4"           # Long Read file
-THREADS="${5:-6}" # Use 5th argument as threads, or default to 6 if not provided
+REF="$1"          # Reference FASTA.
+SR1="$2"          # Short Read R1.
+SR2="$3"          # Short Read R2.
+LR="$4"           # Long Read file.
+THREADS="${5:-6}" # Use 5th argument as threads, or default to 6 if not provided.
 
-# Extract the base name of the reference (e.g., "genome.fasta" -> "genome")
+# Extract the base name of the reference (e.g., "genome.fasta" -> "genome").
 # This is used to name the output files consistently.
 BASENAME=$(basename "$REF" | cut -d. -f1)
 
@@ -46,29 +46,29 @@ echo "--------------------------------------------------"
 # --- Short Reads Processing ---
 echo "[Short Reads] Mapping starts..."
 
-# Map short reads using minimap2
-# -ax sr : Preset for genomic short reads (SR)
-# --MD   : Output the MD tag (required for some variant callers)
-# -t     : Number of threads
+# Map short reads using minimap2.
+# -ax sr : Preset for genomic short reads (SR).
+# --MD   : Output the MD tag (required for some variant callers).
+# -t     : Number of threads.
 minimap2 -ax sr --MD -t "$THREADS" "$REF" "$SR1" "$SR2" > "${BASENAME}_sr.sam"
 
-# Convert SAM to BAM
-# -S : Input is SAM (auto-detected in newer versions, but kept for compatibility)
-# -b : Output is BAM
+# Convert SAM to BAM.
+# -S : Input is SAM (auto-detected in newer versions, but kept for compatibility).
+# -b : Output is BAM.
 samtools view -Sb "${BASENAME}_sr.sam" > "${BASENAME}_sr.bam"
 
-# Remove the intermediate SAM file to save disk space
+# Remove the intermediate SAM file to save disk space.
 rm "${BASENAME}_sr.sam"
 
-# Sort the BAM file
-# -o : Output filename
+# Sort the BAM file.
+# -o : Output filename.
 echo "[Short Reads] Sorting BAM..."
 samtools sort -@ "$THREADS" -o "${BASENAME}_sr_sorted.bam" "${BASENAME}_sr.bam"
 
-# Index the SORTED BAM file (Corrected from original script)
+# Index the SORTED BAM file (Corrected from original script).
 samtools index "${BASENAME}_sr_sorted.bam"
 
-# Remove the unsorted BAM file
+# Remove the unsorted BAM file.
 rm "${BASENAME}_sr.bam"
 
 echo "[Short Reads] Done. Output: ${BASENAME}_sr_sorted.bam"
@@ -78,24 +78,24 @@ echo "[Short Reads] Done. Output: ${BASENAME}_sr_sorted.bam"
 echo "--------------------------------------------------"
 echo "[Long Reads] Mapping starts..."
 
-# Map long reads using minimap2
-# -ax map-pb : Preset for PacBio genomic reads (use 'map-ont' for Nanopore)
+# Map long reads using minimap2.
+# -ax map-pb : Preset for PacBio genomic reads (use 'map-ont' for Nanopore).
 minimap2 -ax map-pb --MD -t "$THREADS" "$REF" "$LR" > "${BASENAME}_lr.sam"
 
-# Convert SAM to BAM
+# Convert SAM to BAM.
 samtools view -Sb "${BASENAME}_lr.sam" > "${BASENAME}_lr.bam"
 
-# Remove intermediate SAM
+# Remove intermediate SAM.
 rm "${BASENAME}_lr.sam"
 
-# Sort the BAM file
+# Sort the BAM file.
 echo "[Long Reads] Sorting BAM..."
 samtools sort -@ "$THREADS" -o "${BASENAME}_lr_sorted.bam" "${BASENAME}_lr.bam"
 
-# Index the SORTED BAM file
+# Index the SORTED BAM file.
 samtools index "${BASENAME}_lr_sorted.bam"
 
-# Remove the unsorted BAM file
+# Remove the unsorted BAM file.
 rm "${BASENAME}_lr.bam"
 
 echo "[Long Reads] Done. Output: ${BASENAME}_lr_sorted.bam"
