@@ -1,11 +1,11 @@
 #!/usr/bin/env/ Rscript
 
-# This script performs a Preincipal Component Analysis using the amino acid frequencies (previously normalized) of the species under study,
+# This script performs a Principal Component Analysis using the amino acid frequencies (previously normalized) of the species under study,
 # allowing you to visualize and identify grouping patterns.
 # It is important to associate the PCA with a statistical test (in some papers about aminoacidic frequencies was used a PERMANOVA).
+# This script follows the 'aminoacid_usage.R' one to better visualize the results, and it requires the same summary file containing the 
+# normalized amino acid frequencies as input.
 
-# USAGE:
-# [Rstudio] source(aminoacid_usage_pca.R)
 
 library(ggplot2)
 library(dplyr)
@@ -45,7 +45,7 @@ hulls <- scores %>%
   # slice() selects them.
   slice(chull(PC1, PC2))
 
-# Define a color vector for the selected groups.
+# Define a color vector for the selected groups (change accordingly).
 group_colors <- c(
   "Macrodasyida"   = "#19647EFF",
   "Chaetonotida"   = "#BED4E9FF",
