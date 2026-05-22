@@ -7,17 +7,15 @@
 # It also needs a folder containing .txt files, each of which refers to a particular taxonomic group present in trees. 
 # These files must contain the name of the species analyzed (with space as separator, instead of underscore).
 
-# USAGE:
-# [bash] run_monophyly_gotree > <output_name>
-
 # Once finished this script, it is possible to run 'gotree' in the same folder containing the treefiles to calculate the statistics of each file with the following command:
 # for a in *.treefile; do gotree stats -i "$a" | awk -v f="${a%.treefile}" 'NR>1{print f"\t"$0}'; done > gotree_stats.txt
 
 
 # Set the imput files.
-# Stores all files ending in .treefile in the directory
+# Stores all files ending in .treefile in the directory.
 trees="*.treefile"
-# Stores all text files in a 'gropus' folder. In this case the folder is located one level up: change the path if necessary.
+# Stores all text files in a 'gropus' folder. 
+# In this case the folder is located one level up: change the path if necessary.
 groups="../groups/*.txt"
 
 # Print the first column header ("Tree").
