@@ -1,14 +1,12 @@
 #!/usr/bin/env Rscript
 
 # This script generates a phylogenetic tree annotated with a heatmap.
+# It requires a csv file containing the monophyly results from a gotree analysis, like the one obtained with the 'monophyly_check_gotree.sh' script.
 # It visualizes the monophyly status (true/false) of different taxonomic groups across multiple alternative trees.
 
 # REQUIRED FILES:
 # 1. A phylogenetic tree file in Newick format;
 # 2. A CSV file containing the monophyly results from a gotree analysis.
-
-# USAGE:
-# [Rstudio] source(monophyly_heatmap_phylogenetic_tree.R)
 
 
 # Load necessary libraries.
@@ -20,6 +18,7 @@ library(dplyr)
 library(tibble)
 
 # Load the phylogenetic tree from a Newick file (change with the correct .nwk file name).
+# It is preferable to use a simplified tree file, not at the species level, but of a higher taxonomic order (e.g. Phylum).
 tree <- read.tree("INPUT_NEWICK_FILE")
 
 # Load the monophyly status data from a CSV file (change with the correct .csv file name).
