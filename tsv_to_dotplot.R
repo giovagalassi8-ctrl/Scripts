@@ -18,9 +18,6 @@
 #   Objects sharing the same group (MS90_g80) are plotted
 #   on the same Y-axis line with different colors.
 
-# USAGE:
-# [RStudio] source("interactive_grouped_dotplot.R")
-
 
 library(ggplot2)
 library(tidyverse)
