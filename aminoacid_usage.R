@@ -1,18 +1,16 @@
 #!/usr/bin/env Rscript
 
-# This script generates a heatmap using the amino acid frequencies (previously normalized) of the species under study.
+# This script generates a heatmap using the amino acid frequencies (previously normalized) of the studied species.
 # Amino acids are grouped based on the Dayhoff6 classification, but you can set a random order or an arbitrary one.
 # Species (row) are hierarchically clustered using the Ward.D2 method on Euclidean distances. 
 # A color sidebar annotates each species by its taxonomic group.
+# You can obtain the amino acid frequencies using the 'AMAS.py summary' script. 
 
 # IMPORTANT:
 # Make sure the data is normalized before launching the script; 
 # in this case the various amino acid frequencies have been normalized using the following command for each amino acid (columns):
 # data <- transform(data, 'column name' = ('column name' / Sum_Aminoacid))
 # In particular, we divide each value for the total amino acid usage of the specie (sum of every value on the same row: so, the sum of every row's value equals 1).
-
-# USAGE:
-# [Rstudio] source(aminoacid_usage.R)
 
 
 library(pheatmap)
@@ -21,7 +19,7 @@ library(viridis)
 library(paletteer)
 
 # Read the CSV file into a data frame (change with the correct file name).
-data <- read.csv("INPUT_FILE", check.names = FALSE)  # check.names = FALSE prevents R from automatically altering column names
+data <- read.csv("INPUT_FILE", check.names = FALSE)   # check.names = FALSE prevents R from automatically altering column names.
 
 # Rename the first column to "Groups" for clarity.
 colnames(data)[1] <- "Groups"
@@ -30,7 +28,7 @@ colnames(data)[1] <- "Groups"
 # These will be used to select the relevant columns from the data frame.
 aa <- c("A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y")
 
-# Define the taxonomic groups of interest.
+# Define the taxonomic groups of interest (change accordingly).
 groups <- c("Platyhelmintes", "Macrodasyida", "Chaetonotida")
 
 # Removes all species in the dataset that are not of interest, 
@@ -42,25 +40,25 @@ filtered_data <- filtered_data[order(filtered_data$Groups), ]
 # Extract only the amino acid columns and convert to a numeric matrix.
 # pheatmap() requires a matrix (not a data frame) as input.
 matrix <- as.matrix(filtered_data[, aa])
-# gsub() replaces patterns within character sequences.In this case the "_" has been replaced with a space.
+# gsub() replaces patterns within character sequences. In this case the "_" in the species name (e.g. Homo_sapiens) has been replaced with a space.
 rownames(matrix) <- gsub("_", " ", filtered_data$Taxon_name)
 
 # Define amino acid order following the Dayhoff classification.
 # Ignore if you don't want to sort amino acids in this way (you have also to set 'cluster_cols=TRUE' into heatmap script).
 dayhoff <- c(
-  "A","G","P","S","T", #Aliphatic/Polar
-  "C", #Cysteine
-  "D","E","N","Q", #Acidic
-  "F","W","Y", #Aromatic
-  "H","K","R", #Basic
-  "I","L","M","V" #Aliphatic/Hydrophobic
+  "A","G","P","S","T",  #Aliphatic/Polar
+  "C",  #Cysteine
+  "D","E","N","Q",  #Acidic
+  "F","W","Y",  #Aromatic
+  "H","K","R",  #Basic
+  "I","L","M","V"  #Aliphatic/Hydrophobic
 )
 
-# Reorder the matrix columns according to the Dayhoff scheme. (You can also change 'dayhoff' with the 'aa' object previously created).
-# IF THE PREVIOUS STEP WAS NOT DONE, SKIP THIS COMMAND.
+# Reorder the matrix columns according to the Dayhoff scheme.
+# Change 'dayhoff' with the 'aa' object if the previous one was not created (or skip this command).
 matrix <- matrix[, dayhoff]
 
-# Create a dataframe with the group of each species (use later for the sidebar).
+# Create a dataframe categorizing by species group (use later for the sidebar).
 rows_annotation <- data.frame(Groups = filtered_data$Groups, 
                               # row.names ensures the annotation aligns correctly with the heatmap rows.
                               row.names = row.names(matrix))
