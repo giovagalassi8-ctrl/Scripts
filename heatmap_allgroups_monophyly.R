@@ -6,9 +6,6 @@
 # I suggest for the imput file to use MonoPhylo.py, that creates a tsv file with all the necessary parameters, but every script that returns the same output is fine:
 # it's just important that this file has this expected columns: Tree Name, Taxonomic Group, Monophyly Status and Support Value.
 
-# USAGE:
-# [Rstudio] source(heatmap_allgroups_monophyly.R)
-
 
 library(ggplot2)
 library(dplyr)
