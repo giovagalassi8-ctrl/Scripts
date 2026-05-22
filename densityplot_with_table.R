@@ -5,9 +5,6 @@
 # It reads data from text files, builds individual plots with custom themes, and finally combines them into a single layout. 
 # Optionally, it computes and appends summary statistics tables next to each corresponding plot.
 
-# USAGE:
-# [Rstudio] source(densityplot_with_table.R)
-
 
 library(ggplot2)
 library(patchwork)
@@ -22,12 +19,27 @@ meansupport <- read.table("gotree_meansupport.txt", header = FALSE, col.names = 
 
 # Create the density plots.
 # (If a different number of statistics is consideres, change accordingly).
-density_plot <- ggplot(meanbrlength, aes(x = MeanBranchLength)) +
-  geom_density( aes(y = after_stat(scaled)*0.4), fill = "#008080", alpha = 0.4, color = "darkslategray", bounds = c(0, 1)) +
-  geom_dotplot(fill = "black", alpha = 0.8, binwidth = 0.005, dotsize = 1, method = "histodot") +
-  geom_vline(aes(xintercept = mean(MeanBranchLength, na.rm = TRUE)), color = "white", linetype = "solid", linewidth = 0.8) +
+density_plot <- ggplot(meanbrlength,
+                       aes(x = MeanBranchLength)) +
+  geom_density(aes(y = after_stat(scaled)*0.4),
+               fill = "#008080",
+               alpha = 0.4,
+               color = "darkslategray",
+               bounds = c(0, 1)) +
+  geom_dotplot(fill = "black",
+               alpha = 0.8,
+               binwidth = 0.005,
+               dotsize = 1,
+               method = "histodot") +
+  geom_vline(aes(xintercept = mean(MeanBranchLength, na.rm = TRUE)),
+             color = "white",
+             linetype = "solid",
+             linewidth = 0.8) +
   theme_bw() +
-  theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black")) +
   labs(
     title = "Mean Branch Length Distribution",
     x = "Mean Branch Length",
@@ -40,11 +52,25 @@ density_plot <- ggplot(meanbrlength, aes(x = MeanBranchLength)) +
   scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.1))
 
 density_plot2 <- ggplot(sumbrlength, aes(x = SumBranchLength)) +
-  geom_density( aes(y = after_stat(scaled)*0.4), fill = "#008080", alpha = 0.4, color = "darkslategray", bounds = c(0, 100)) +
-  geom_dotplot(fill = "black", alpha = 0.8, binwidth = 0.5, dotsize = 1, method = "histodot") +
-  geom_vline(aes(xintercept = mean(SumBranchLength, na.rm = TRUE)), color = "White", linetype = "solid", linewidth = 0.8) +
+  geom_density(aes(y = after_stat(scaled)*0.4),
+               fill = "#008080",
+               alpha = 0.4,
+               color = "darkslategray",
+               bounds = c(0, 100)) +
+  geom_dotplot(fill = "black",
+               alpha = 0.8,
+               binwidth = 0.5,
+               dotsize = 1,
+               method = "histodot") +
+  geom_vline(aes(xintercept = mean(SumBranchLength, na.rm = TRUE)),
+             color = "White",
+             linetype = "solid", 
+             linewidth = 0.8) +
   theme_bw() +
-  theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black")) +
   labs(
     title = "Sum Branch Length Distribution",
     x = "Sum Branch Length",
@@ -57,11 +83,25 @@ density_plot2 <- ggplot(sumbrlength, aes(x = SumBranchLength)) +
   scale_x_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
 
 density_plot3 <- ggplot(meansupport, aes(x = MeanSupport)) +
-  geom_density( aes(y = after_stat(scaled)*0.6), fill = "#008080", alpha = 0.4, color = "darkslategray", bounds = c(0, 100)) +
-  geom_dotplot(fill = "black", alpha = 0.8, binwidth = 0.5, dotsize = 1, method = "histodot") +
-  geom_vline(aes(xintercept = mean(MeanSupport, na.rm = TRUE)), color = "White", linetype = "solid", linewidth = 0.8) +
+  geom_density(aes(y = after_stat(scaled)*0.6),
+               fill = "#008080",
+               alpha = 0.4,
+               color = "darkslategray",
+               bounds = c(0, 100)) +
+  geom_dotplot(fill = "black",
+               alpha = 0.8,
+               binwidth = 0.5,
+               dotsize = 1,
+               method = "histodot") +
+  geom_vline(aes(xintercept = mean(MeanSupport, na.rm = TRUE)),
+             color = "White",
+             linetype = "solid",
+             linewidth = 0.8) +
   theme_bw() +
-  theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(colour = "black")) +
   labs(
     title = "Mean Support Distribution",
     x = "Mean Support",
