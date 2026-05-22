@@ -6,9 +6,6 @@
 # 1. Mapping file (tsv format) contains species names in column 1 and their corresponding clades in column 2.
 # 2. The target tree file where labels will be added.
 
-# USAGE: 
-# [bash] ./annotate_tree.sh <mapping_table.tsv> <tree_file>
-
 
 # Check if the correct number of arguments is provided.
 if [ "$#" -ne 2 ]; then
