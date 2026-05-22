@@ -8,9 +8,6 @@
 # It is possible to set some parameters in the script to visualize other statistics and improve resolution.
 # In the final part of the script it is possible to add two density plot (or any kind of plot you desire).
 
-# USAGE:
-# [Rstudio] source("treeness_scatterplot.R")
-
 
 library(ggplot2)
 library(patchwork)
