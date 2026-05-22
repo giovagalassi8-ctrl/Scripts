@@ -1,11 +1,10 @@
 # !/bin/bash
 
 # This script performs a monophyly check using the Monophylo.py script. 
-# It must be launched inside a folder containing all the treefiles you want to analyze, using a TSV file that contains the various taxonomic groupings for each species considered. 
-# In this last file can be added columns also containing taxonomic groups such as superphyla, superfamilies, or any type of grouping desired
+# It must be launched inside a folder containing all the treefiles you want to analyze, 
+# using a TSV file that contains the various taxonomic groupings for each species considered. 
+# In this last file can be added columns also containing taxonomic groups such as superphyla, superfamilies, or any type of grouping desired.
 
-# USAGE:
-# [bash] ./run_MonoPhylo.sh
 
 # Define the output directory.
 OUTDIR="OUTPUT_DIRECTORY_PATH"
