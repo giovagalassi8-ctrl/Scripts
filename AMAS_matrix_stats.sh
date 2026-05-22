@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# This script recursively finds all concatenated_*.out files in your repository, copies them into a 'matrix_stats' directory, 
-# and runs AMAS.py to generate summary statistics for each file, producing one summary output per concatenated matrix.
-
-# USAGE:
-# [bash] ./AMAS_matrix_stats.sh
+# This script recursively finds all concatenated_*.out files in your repository (in this case, a supermatrix containing different submatrices), 
+# copies them into a 'matrix_stats' directory, and runs AMAS.py to generate summary statistics for each file,
+# producing one summary output per concatenated matrix.
 
 
 # Output directory where copied files and AMAS results will be stored (change the name if necessary).
@@ -18,7 +16,7 @@ FINAL_SUMMARY="$OUTDIR/all_matrix_stats.txt"
 
 # Recursively find all concatenated_*.out files.
 find . -type f -name "concatenated_*.out" | while read -r file; do
-    # Extract filename without path
+    # Extract filename without path.
     basefile=$(basename "$file")
 
     # Extract the part between 'concatenated_' and '.out'.
