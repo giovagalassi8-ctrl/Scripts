@@ -4,9 +4,6 @@
 # The hight of the different segments is based on a selected variable (e.g. the number of phyla considered in that study),
 # while the color of each point is assigned using a continuos gradient that consider a different variable (e.g. the number of species used).
 
-# USAGE:
-# [Rstudio] source(lollipop_timeline_plot.R)
-
 
 library(ggplot2)
 library(tidyverse)
