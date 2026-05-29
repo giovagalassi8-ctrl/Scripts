@@ -4,6 +4,7 @@
 # A single mixture model (C60+G+F) is applied to the entire supermatrix, without a partition file. 
 # Each job is launched in a dedicated detached screen session, allowing all runs to execute simultaneously in the background.
 
+
 # Set the number of cores (change based on the number of threads available).
 TOTAL_THREADS=54
 # Set the number of jobs (change accordingly). 
