@@ -27,8 +27,8 @@ for DIR in "${FOLDERS[@]}"; do
     SUFFIX="${DIR#*_}"
     
     # Set the output directory and if does not exist, it is created. Change the name as you desire. 
-    # (In this example: ML refers to a Maximum Likelyhood tree; allgenes refers to the fact that no one filters was applied to this matrix; PM refers to the use of a Partitions Model).
-    OUTDIR="$DIR/01_ML_${SUFFIX}_allgenes_PM"
+    # (In this example: ML refers to a Maximum Likelyhood tree; MS80 refers to a supermatrix; allgenes refers to the fact that no one filters was applied to this matrix; PM refers to the use of a Partitions Model).
+    OUTDIR="$DIR/01_ML_MS80_${SUFFIX}_allgenes_PM"
     mkdir -p "$OUTDIR"
 
     # Check if the output directory has alreay a *.treefile.
@@ -57,7 +57,7 @@ for DIR in "${FOLDERS[@]}"; do
     cp "$PART" "$OUTDIR/"
 
     # Set the final treefile name. Change as desired (in this example, PM refers to a partitions model)
-    PREFIX="$OUTDIR/ML_${SUFFIX}_PM"
+    PREFIX="$OUTDIR/ML_MS80_${SUFFIX}_PM"
 
     # Run the iqtree command.
     CMD="iqtree3 -s $OUTDIR/$(basename $MAT) \
@@ -104,7 +104,7 @@ for DIR in "${FOLDERS[@]}"; do
     
     # Set the output directory and if does not exist, it is created. Change the name as you desire. 
     # (In this example: ML refers to a Maximum Likelyhood tree; allgenes refers to the fact that no one filters was applied to this matrix; PM refers to the use of a Partitions Model).
-    OUTDIR="$DIR/01_ML_${SUFFIX}_allgenes_PM"
+    OUTDIR="$DIR/01_ML_MS80_${SUFFIX}_allgenes_PM"
     mkdir -p "$OUTDIR"
 
     # Check if the output directory has alreay a *.treefile.
