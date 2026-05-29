@@ -2,7 +2,7 @@
 
 # Script source: https://bioinformatics.stackexchange.com/questions/3931/remove-delete-sequences-by-id-from-multifasta
 
-# This script filters a multi-FASTA file by removing sequences whose headers match entries in a user-provided exclusion list. 
+# This script filters a multi-FASTA file by removing sequences whose headers match entries in a user-provided exclusion list (that you can obtain using LB_detect_outliers.py). 
 # Sequences NOT in the list are written to stdout, making it easy to redirect output to a new file.
 # The output is a filtered FASTA sequences printed to stdout; redirect with ">" to save to a file.
 # A warning is printed to stderr if any IDs in the exclusion list were not found in the input FASTA (e.g. due to typos or mismatched headers).
