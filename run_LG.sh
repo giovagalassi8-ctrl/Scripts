@@ -133,7 +133,7 @@ for DIR in "${FOLDERS[@]}"; do
     cp "$PART" "$OUTDIR/"
 
     # Set the final treefile name. Change as desired (in this example, PM refers to a partitions model)
-    PREFIX="$OUTDIR/ML_${SUFFIX}_PM"
+    PREFIX="$OUTDIR/ML_MS80_${SUFFIX}_PM"
 
     # Run the iqtree command.
     CMD="iqtree3 -s $OUTDIR/$(basename $MAT) \
