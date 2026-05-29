@@ -1,8 +1,8 @@
 # !/usr/bin/bash
 
 # This script automates parallel IQ-TREE3 runs across multiple trimmed supermatrices, each representing a different alignment-trimming stringency or method.
+# A single mixture model (C60+G+F) is applied to the entire supermatrix, without a partition file. 
 # Each job is launched in a dedicated detached screen session, allowing all runs to execute simultaneously in the background.
-
 
 # Set the number of cores (change based on the number of threads available).
 TOTAL_THREADS=54
