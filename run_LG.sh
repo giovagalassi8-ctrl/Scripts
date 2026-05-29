@@ -42,7 +42,7 @@ for DIR in "${FOLDERS[@]}"; do
     MAT="$DIR/concatenated_${SUFFIX}.out"
     PART="$DIR/partitions_${SUFFIX}.txt"
 
-    # Check the existence of these files
+    # Check the existence of these files.
     if [[ ! -f "$MAT" ]]; then
         echo "Matrice mancante: $MAT  (skip $DIR)"
         continue
