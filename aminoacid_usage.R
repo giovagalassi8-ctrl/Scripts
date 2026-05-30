@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+# !/usr/bin/env Rscript
 
 # This script generates a heatmap using the amino acid frequencies (previously normalized) of the studied species.
 # Amino acids are grouped based on the Dayhoff6 classification, but you can set a random order or an arbitrary one.
