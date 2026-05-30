@@ -5,7 +5,6 @@
 # This makes the results easier to inspect, filter, and use as input for downstream plotting scripts (e.g. BUSCO_plot.R).
 # It requires a concatenated BUSCO short summary lines, one per species, in the format: <species> C:X%[S:X%,D:X%],F:X%,M:X%,n:X. 
 # This file can be obtained by the concatenation of all the short_summary*.txt files produced after a BUSCO run for every species.
-
 # The output file obtained is a tab-separated table with columns: Species, C, S, D, F, M, n.
 # If a line does not match the expected format, all values are set to NA.
 
