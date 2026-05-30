@@ -1,4 +1,4 @@
-# !/usr/bin/bash
+# !/bin/bash
 
 # This script automates parallel IQ-TREE3 runs across multiple trimmed supermatrices, each representing a different alignment-trimming stringency or method.
 # A single mixture model (C60+G+F) is applied to the entire supermatrix, without a partition file. 
