@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 # This script identifies and remove long-branch (LB) outlier taxa from a phylogenetic datase, 
 # working indipendently whithin each taxonomic clade.
