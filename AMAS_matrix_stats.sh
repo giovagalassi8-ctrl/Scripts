@@ -1,4 +1,4 @@
-#!/bin/bash
+# !/bin/bash
 
 # This script recursively finds all concatenated_*.out files in your repository (in this case, a supermatrix containing different submatrices), 
 # copies them into a 'matrix_stats' directory, and runs AMAS.py to generate summary statistics for each file,
