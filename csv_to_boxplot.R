@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+# !/usr/bin/env Rscript
 
 # This script reads a CSV file containing different data from different species (each one associated to an higher taxonomic group, e.g. Phylum).
 # It produces a boxplot visualizing the distribution of the selected statistic using ggplot2, with custom colors and clean formatting.
