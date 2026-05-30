@@ -1,4 +1,4 @@
-# !/usr/bin/bash
+# !/bin/bash
 
 # This script automates parallel IQ-TREE3 runs across multiple trimmed supermatrices, each representing a different alignment-trimming stringency or method.
 # Each job is launched in a dedicated detached screen session, allowing all runs to execute simultaneously in the background.
