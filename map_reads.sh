@@ -1,4 +1,4 @@
-#!/bin/bash
+# !/bin/bash
 
 # This script maps both short paired-end reads (Illumina) and long reads (PacBio/Nanopore) to a reference assembly/genome. It performs the following steps for both data types:
 # 1. Map reads using minimap2 to generate a SAM file.
