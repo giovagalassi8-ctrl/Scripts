@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+# !/usr/bin/env Rscript
 
 # Generates a horizontal stacked bar chart visualizing BUSCO completeness results across multiple samples/assemblies.
 # Each bar represents one sample and is divided into four BUSCO categories: Single-copy (S), Duplicated (D), Fragmented (F),
