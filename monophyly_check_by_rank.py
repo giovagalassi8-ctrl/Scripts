@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 # This script performs a monophyly check and finds the  bootstrap support value associated with the nodes of interest.
 # It can be used considering different taxonomic ranks (those that are not present on a species tree, but which one would like to analyze).
