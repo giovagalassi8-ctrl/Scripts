@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+# !/usr/bin/env Rscript
 
 # This script generates a phylogenetic tree annotated with a heatmap.
 # It requires a csv file containing the monophyly results from a gotree analysis, like the one obtained with the 'monophyly_check_gotree.sh' script.
