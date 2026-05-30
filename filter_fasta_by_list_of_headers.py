@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 # Script source: https://bioinformatics.stackexchange.com/questions/3931/remove-delete-sequences-by-id-from-multifasta
 
