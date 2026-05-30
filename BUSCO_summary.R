@@ -1,4 +1,4 @@
-# !/usr/bin/env/ Rscript
+# !/usr/bin/env Rscript
 
 # This script merges a BUSCO summary table with a species-to-clade mapping file.
 # It allows you to evaluate the quality of BUSCO (Benchmarking Universal Single-Copy Orthologs) genomes, 
