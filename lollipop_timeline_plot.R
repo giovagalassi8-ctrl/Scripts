@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+# !/usr/bin/env Rscript
 
 # This script creates a timeline bar on which are collocated different points associated to an event (e.g. different pubblications about the same topic).
 # The hight of the different segments is based on a selected variable (e.g. the number of phyla considered in that study),
