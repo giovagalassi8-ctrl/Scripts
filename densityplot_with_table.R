@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+# !/usr/bin/env Rscript
 
 # This script visualizes phylogenetic tree metrics by generating combined density and dot plots for Mean Branch Length, Sum Branch Length, and Mean Support.
 # These statistics could be obtained using 'gotree stats' command.
