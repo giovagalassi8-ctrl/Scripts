@@ -1,4 +1,4 @@
-#!/bin/bash
+# !/bin/bash
 
 # This script annotates a phylogenetic tree file by appending a clade suffix to the species names, based on a provided mapping table.
 
