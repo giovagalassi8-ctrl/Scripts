@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 # This script filters a set of genes based on their RCV (Relative Composition Variability) scores, retaining only those below the 75th percentile threshold.
 # Genes with high RCV values show greater compositional heterogeneity across taxa, which can introduce systematic bias in phylogenetic inference. 
