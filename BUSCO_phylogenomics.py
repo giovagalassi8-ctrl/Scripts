@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 
 # BUSCO_phylogenomics
 # Utility script to construct species phylogenies using BUSCO results.
