@@ -3,14 +3,6 @@
 # Collects and organises BUSCO output files from multiple species into a single unified directory.
 # After running BUSCO independently on several assemblies, each producing its own "*_busco" output folder,
 # this script gathers all results into a standardised folder structure, making downstream analyses easier to manage.
-# For each "*_busco" folder found in the current directory the script:
-#     1. Checks whether the expected BUSCO output subfolder exists
-#        (run_metazoa_odb10/busco_sequences/); if not, prints a warning.
-#     2. Extracts the species name by removing the "_busco" suffix.
-#     3. Creates a dedicated subdirectory for that species inside
-#        all_busco_sequences/.
-#     4. Copies the entire run_metazoa_odb10/ folder into it, preserving
-#        the original BUSCO directory structure.
 
 
 # Store the current working directory path for reference.
