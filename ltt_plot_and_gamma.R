@@ -12,7 +12,7 @@ library(ape)
 library(geiger)
 
 # Import the time-calibrated tree in Newick format (change with the correct name).
-tree <- read.tree("NEWICK_TREE")
+tree <- read.tree("Carditidae.nwk")
 # Print the total number of tips (species) currently present in the tree.
 cat("Number of tips in the tree:", Ntip(tree), "\n")
 
@@ -41,7 +41,7 @@ expected_line_y <- c(2, n_tips_check)
 lines(expected_line_x, expected_line_y, col = "red", lty = 2, lwd = 1.5)
 # Add a legend to differentiate the observed data from the theoretical expectation.
 legend("topleft", 
-       legend = c("Observed", "Constant rate (Expected)"),
+       legend = c("Observed", "Expected (Constant rate)"),
        col = c("black", "red"), 
        lty = c(1, 2),
        bty = "n",
@@ -112,8 +112,8 @@ mccr_results <- tryCatch(
     # Store results in the same standardized list format
     list(
       method = "manual (replicate simulation)",
-      p_value = p_manual,
-      critical_value = crit_manual
+      p_value = p_mccr,
+      critical_value = critical_value
     )
   }
 )
@@ -162,16 +162,16 @@ cat("DeltaR:", round(deltaR_res$deltaR, 4), " (negative = slowdown)\n")
 
 # Create a single-row dataframe consolidating all the calculated metrics for the clade.
 summary_row <- data.frame(
-  clade = "CLADE_NAME", # Change with the correct name.
+  clade = "Carditidae",
   n_tips = n_taxa_tree,
   n_known_species = n_known_taxa,
   sampling_fraction = sampling_fraction,
   gamma = gamma_stat,
   p_naive = p_naive,
-  p_mccr = p_mccr,
+  p_mccr = mccr_results$p_value,
   deltaR = deltaR_res$deltaR
 )
 
 # Export the summary row to a CSV file (change the file name as desired).
-write.csv(summary_row, "DIVERISFICATION_SUMMARY.CSV", row.names = FALSE)
+write.csv(summary_row, "Carditidae_diversification_summary.csv", row.names = FALSE)
 print(summary_row)
