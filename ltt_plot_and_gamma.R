@@ -3,20 +3,22 @@
 # This script analyzes the diversification history of a specific clade using the relative phylogenetic tree.  
 # It generates a Lineage-Through-Time (LTT) plot, computes the Gamma statistic, and calculates the DeltaR statistic.
 # The aim of it is to detect signatures of diversification slowdowns or accelerations over time. 
-# If the provided tree is heavily undersampled (e.g., 14 out of ~140 known species are present), the script manually performs a Monte Carlo Constant Rates 
-# (MCCR) test to correct the Gamma statistic for incomplete taxon sampling, preventing false positive signals of slowdown.
+# It features a strict quality control for ultrametricity and a hybrid MCCR implementation: it defaults to the standard 'geiger' package for MCCR correction 
+# but automatically falls back to an optimized manual simulation if 'geiger' fails.
 # It requires a specific clade time-calibrated phylogenetic tree in Newick format.
 
 
 library(ape)
+library(geiger)
 
 # Import the time-calibrated tree in Newick format (change with the correct name).
 tree <- read.tree("NEWICK_TREE")
 # Print the total number of tips (species) currently present in the tree.
 cat("Number of tips in the tree:", Ntip(tree), "\n")
 
-# Verify if the tree is ultrametric (all tips end at time 0, i.e., the present).
-cat("Is the tree ultrametric?", is.ultrametric(tree), "\n")
+# Verify if the tree is ultrametric (all tips end at time 0, i.e., the present). If it is not, the script stops immediately.
+stopifnot(is.ultrametric(tree))
+cat("Tree successfully passed the ultrametric quality check.\n")
 # Extract branching times and find the maximum to determine the root age (in million years).
 cat("Root age (in Myrs):", round(max(branching.times(tree)), 2), "\n")
 
@@ -69,39 +71,60 @@ sampling_fraction <- n_taxa_tree / n_known_taxa
 cat("\nSampling fraction:", round(sampling_fraction, 3), "\n")
 
 # Define a function to perform the Monte Carlo Constant Rates (MCCR) test.
-# Using 'replicate' replaces the slow 'for' loop and makes the code cleaner.
-mccr_manual <- function(n_real, n_sampled, nsim = 1000, seed = 1) {
-  # Set the random seed to ensure reproducibility of the simulation.
-  set.seed(seed)
-  # Repeat the enclosed expression 'nsim' times and store results in a vector.
-  replicate(nsim, {
-    # Simulate a full tree with 'n_real' species under a pure birth model.
-    full_tree <- rphylo(n = n_real, birth = 1, death = 0)
-    # Randomly select a subset of tips matching our empirical sample size ('n_sampled').
-    pruned_tips <- sample(full_tree$tip.label, n_sampled)
-    # Prune the simulated tree to keep only the randomly sampled tips.
-    pruned_tree <- keep.tip(full_tree, pruned_tips)
-    # Calculate and return the gamma statistic for this pruned simulated tree.
-    gammaStat(pruned_tree)
-  })
-}
+# Try geiger first, fallback to manual simulation if it fails
+mccr_results <- tryCatch(
+  {
+    # Attempt Primary Method: geiger::mccr
+    res_geiger <- mccr(phy = tree, rho = sampling_fraction, nsim = 1000)
+    # Store results in a standardized list format
+    list(
+      method = "geiger",
+      p_value = res_geiger$p,
+      critical_value = res_geiger$Critical.value
+    )
+  },
+  error = function(e) { 
+    # Fallback Method: Manual simulation
+    mccr_manual <- function(n_real, n_sampled, nsim = 1000, seed = 1) {
+      # Set the random seed to ensure reproducibility of the simulation.
+      set.seed(seed)
+      # Using 'replicate' replaces the slow 'for' loop and makes the code cleaner.
+      replicate(nsim, {
+        # Simulate a full tree with 'n_real' species under a pure birth model.
+        full_tree <- rphylo(n = n_real, birth = 1, death = 0)
+        # Randomly select a subset of tips matching our empirical sample size ('n_sampled').
+        pruned_tips <- sample(full_tree$tip.label, n_sampled)
+        # Prune the simulated tree to keep only the randomly sampled tips.
+        pruned_tree <- keep.tip(full_tree, pruned_tips)
+        # Calculate and return the gamma statistic for this pruned simulated tree.
+        gammaStat(pruned_tree)
+      })
+    }
+    
+    # Execute the MCCR function to generate a null distribution of gamma values.
+    gamma_null_dist <- mccr_manual(n_known_taxa, n_taxa_tree, nsim = 1000)
+    
+    # Calculate the corrected p-value: proportion of simulated gammas as or more extreme than the observed one.
+    p_mccr <- mean(abs(gamma_null_dist) >= abs(gamma_stat))
+    # Calculate the critical threshold (bottom 2.5% tail) of the simulated null distribution.
+    critical_value <- quantile(gamma_null_dist, 0.025)
+    
+    # Store results in the same standardized list format
+    list(
+      method = "manual (replicate simulation)",
+      p_value = p_manual,
+      critical_value = crit_manual
+    )
+  }
+)
 
-# Execute the MCCR function to generate a null distribution of gamma values.
-gamma_null_dist <- mccr_manual(n_known_taxa, n_taxa_tree, nsim = 1000)
 
-# Calculate the corrected p-value: proportion of simulated gammas as or more extreme than the observed one.
-p_mccr <- mean(abs(gamma_null_dist) >= abs(gamma_stat))
-# Calculate the critical threshold (bottom 2.5% tail) of the simulated null distribution.
-critical_value <- quantile(gamma_null_dist, 0.025)
-
-# Print the mean of the simulated null distribution.
-cat("  Mean:", round(mean(gamma_null_dist), 3), "\n")
+# Print the final standardized results regardless of the method used
+cat("\nMCCR Method Used:", mccr_results$method, "\n")
 # Print the critical threshold boundary.
-cat("  Critical threshold (2.5th percentile):", round(critical_value, 3), "\n")
-# Reprint the observed empirical gamma for direct visual comparison.
-cat("Observed Gamma:", round(gamma_stat, 3), "\n")
+cat("  Critical threshold (2.5th percentile):", round(as.numeric(mccr_results$critical_value), 3), "\n")
 # Print the final, reliable, MCCR-corrected two-tailed p-value.
-cat("MCCR p-value (two-tailed):", round(p_mccr, 4), "\n")
+cat("MCCR p-value (two-tailed):", round(as.numeric(mccr_results$p_value), 4), "\n")
 
 
 # Define a function to calculate an alternative diversification metric (DeltaR).
