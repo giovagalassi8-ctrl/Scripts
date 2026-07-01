@@ -8,16 +8,17 @@
 library(sf)
 library(dplyr)
 library(ggplot2)
+library(ggrepel)
 
 # Import a .csv file obtained by the 'geographic_coordinates_gbif.R' script.
 # This file is supposed to contain the following columns: species, decimalLatitude, decimalLongitude.
 # (Change with the correct name).
-coordinates <- read.csv("COORDINATES.CSV", stringsAsFactors = FALSE)
+coordinates <- read.csv("Carditidae_coordinates.csv", stringsAsFactors = FALSE)
 # Remove invalid coordinates.
 coordinates <- coordinates %>%
   filter(!is.na(decimalLatitude), !is.na(decimalLongitude),
          !(decimalLatitude == 0 & decimalLongitude == 0)) %>%
-# Convert to spatial object.
+  # Convert to spatial object.
   st_as_sf(coords = c("decimalLongitude", "decimalLatitude"), 
            # Coordinate Reference System. The 4326 code corresponds to WGS84.
            crs = 4326) %>%
@@ -58,7 +59,7 @@ overlap_table <- bind_rows(lapply(pairs, function(p) {
   intersection_area <- suppressWarnings(
     tryCatch(as.numeric(st_area(st_intersection(h1, h2))),
              error = function(e) 0))
-  if (length(inter_area) == 0) inter_area <- 0
+  if (length(intersection_area) == 0) intersection_area <- 0
   # Calculate union area.
   union_area <- suppressWarnings(
     tryCatch(as.numeric(st_area(st_union(h1, h2))),
@@ -66,22 +67,60 @@ overlap_table <- bind_rows(lapply(pairs, function(p) {
   # Return row dataframe.
   data.frame(sp1 = p[1],
              sp2 = p[2],
-             overlap_index = inter_area / union_area)
+             overlap_index = intersection_area / union_area)
 }))
 
 # Save the final dataframe (change as necessary).
-write.csv(overlap_table, "PAIRWISE_OVERLAP.CSV", row.names = FALSE)
+write.csv(overlap_table, "Carditidae_pairwise_overlap.csv", row.names = FALSE)
 # Synthesize clade-level overlap.
 clade_overlap_mean <- mean(overlap_table$overlap_index, na.rm = TRUE)
 cat("\nMean overlap:", round(clade_overlap_mean, 3), "\n")
 
+
 # Create the final plot to visualize the overlap of the geographic distributions.
-plot(st_geometry(coordinates),
-     # Assign an unique fill color to each species (sequence from 1 to the number of total rows).
-     col = adjustcolor(1:nrow(coordinates),
-                       # Makes the polygons semi-transparent to reveal overlapping areas.
-                       alpha.f = 0.3),
-     # Assign a unique border to each polygon, matching its fill color.
-     border = 1:nrow(coordinates), 
-     # Set the title of the graph (change as desired).
-     main = "Geographic Ranges")
+get_label_point <- function(geom) {
+  # Try to get a point guaranteed to lie on the polygon's surface.
+  pt <- tryCatch(st_point_on_surface(geom), error = function(e) NULL)
+  # Fallback if the above failed (degenerate/invalid geometry).
+  if (is.null(pt) || length(pt) == 0) {
+    # Get the bounding box of the polygon.
+    bb <- st_bbox(geom)
+    # Use the bounding box center as the label anchor point instead.
+    pt <- st_sfc(st_point(c(mean(bb[c("xmin", "xmax")]), mean(bb[c("ymin", "ymax")]))),
+                 crs = st_crs(geom))
+  }
+  # Return the anchor point as plain [X, Y] coordinates.
+  st_coordinates(pt)
+}
+# Compute the label anchor point for every species and stack results into one matrix.
+label_coords <- do.call(rbind, lapply(coordinates$geometry, get_label_point))
+# Store the anchor point coordinates as new columns.
+coordinates$label_x <- label_coords[, "X"]
+coordinates$label_y <- label_coords[, "Y"]
+
+# Build the plot.
+final_plot <- ggplot(coordinates) +
+  # Draw each species' range polygon, colored by species and semi-transparent.
+  geom_sf(
+    aes(fill = species,
+        color = species),
+    alpha = 0.3,
+    linewidth = 0.6) +
+  # geom_text_repel automatically nudges overlapping labels apart and draws a thin connecting segment back to the anchor point whenever a label had to be moved away from it.
+  geom_text_repel(aes(x = label_x, y = label_y, label = species, color = species),
+                  size = 2.2,                # label font size
+                  fontface = "italic",       # italics, standard for species names
+                  segment.color = "grey40",  # leader line color
+                  segment.size = 0.4,        # leader line thickness
+                  min.segment.length = 0,    # always draw the connecting segment
+                  box.padding = 0.3,         # min spacing kept around each label
+                  max.overlaps = Inf,        # never hide a label for being too crowded
+                  show.legend = FALSE) +     # no separate legend for this layer
+  # Set the plot title and drop the default axis titles.
+  labs(title = "Geographic Ranges", x = NULL, y = NULL) +
+  theme_minimal() +
+  # Remove the color legend since species names are already shown as text.
+  theme(legend.position = "none")
+
+# Show the plot.
+print(final_plot)
