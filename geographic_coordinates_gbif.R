@@ -14,8 +14,10 @@ taxonomy <- read.csv("WORMS_TAXONOMY.CSV", stringsAsFactors = FALSE)
 # Build the actual name to send to GBIF for each species.
 # In this case, the resolved 'valid_name' is preferred if one was found; 
 # if a species could not be resolved at all, the original tree tip name are selected.
+# In this case the parameters are setted for a WoRMS file; 
+# if the data derived from GBIF, you have to change 'taxonomy$valid_name' with 'taxonomy$gbif_accepted_name .
 taxonomy$name_to_query <- ifelse(!is.na(taxonomy$valid_name) & taxonomy$valid_name != "",
-                               taxonomy$valid_name, taxonomy$queried_name)
+                                 taxonomy$valid_name, taxonomy$queried_name)
 
 # Shows the final list of names about to be queried, for a quick check.
 print(taxonomy$name_to_query)
