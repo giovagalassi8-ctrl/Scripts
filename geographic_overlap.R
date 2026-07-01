@@ -4,10 +4,10 @@
 # It construct spatial polygons from occurrence points and computes a Jaccard-like overlap index (intersection area / union area) for every species pair.
 # It requires a csv file obtained by the 'geographic_coordinates_gbif.R' script, which contains valid coordinates (WGS84 are preferred).
 
+
 library(sf)
 library(dplyr)
 library(ggplot2)
-
 
 # Import a .csv file obtained by the 'geographic_coordinates_gbif.R' script.
 # This file is supposed to contain the following columns: species, decimalLatitude, decimalLongitude.
