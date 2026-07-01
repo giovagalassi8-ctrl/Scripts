@@ -62,7 +62,7 @@ cat("Naive p-value (NOT corrected for missing taxa):", round(p_naive, 4), "\n")
 # Define the number of species currently in our tree.
 n_taxa_tree <- Ntip(tree)
 # Define the estimated true total number of species for the clade.
-# Change with the correct number. For example, you can check on WoRMS database for marine species.
+# CHANGE WITH THE CORRECT NUMBER. For example, you can check on WoRMS for marine species.
 n_known_taxa <- 140
 
 # Calculate the fraction of the clade that is actually sampled in our tree.
