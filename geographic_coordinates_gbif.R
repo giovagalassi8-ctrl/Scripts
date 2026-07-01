@@ -18,7 +18,7 @@ taxonomy$name_to_query <- ifelse(!is.na(taxonomy$valid_name) & taxonomy$valid_na
                                taxonomy$valid_name, taxonomy$queried_name)
 
 # Shows the final list of names about to be queried, for a quick check.
-print(lookup$name_to_query)
+print(taxonomy$name_to_query)
 
 # This function takes a single species name and returns its GBIF occurrence data as a data frame (or NULL).
 download_gbif <- function(species_name) {
