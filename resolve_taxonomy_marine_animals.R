@@ -3,7 +3,7 @@
 # This script takes a phylogenetic tree (in Newick format) and looks up each species name in WoRMS and GBIF databases to find the currently accepted scientific name.
 # Sometimes the tip labels often use older names or synonyms that no longer match the name used in the database when the datas were added.
 # This could be useful if you have to download geographic occurrence data for the species in a phylogenetic tree.
-# The final result of this script could be used to run the "download_geo_coordinates_gbif.R" .
+# The final result of this script could be used to run the "geographic_coordinates_gbif.R" .
 
 # IMPORTANT: Both WoRMS and GBIF use approximate name matching. 
 # This means that for a name with no exact match in the database, the script will still return its closest guess rather then falling outright (the guess is not guaranteed to be correct).
