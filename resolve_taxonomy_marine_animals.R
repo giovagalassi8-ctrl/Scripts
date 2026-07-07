@@ -15,7 +15,7 @@ library(worrms)
 library(rgbif)
 library(stringr)
 
-# Import the phylogenetic tree (mainly a time tree, downloaded from timetree.org) in Newick format (change accordingly).
+# Import the phylogenetic tree (mainly a time tree, downloaded from timetree.org or obtained using the 'otl_to_timetree.R' script) in Newick format (change accordingly).
 tree <- read.tree("NEWICK_TREE")
 # Create an object that includes only the tips labels.
 tip_names <- tree$tip.label
