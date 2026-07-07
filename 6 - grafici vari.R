@@ -13,11 +13,11 @@ library(ggplot2)
 library(ggrepel)
 
 # --- 1. LOAD AND PREPROCESS DATA ---------------------------------------------
-if (!file.exists("All_data.csv")) {
+if (!file.exists("analyses/Geographic_overlap/All_data.csv")) {
   stop("Input file 'All_data.csv' not found.")
 }
 
-clade_data <- read.csv("All_data.csv", stringsAsFactors = FALSE)
+clade_data <- read.csv("analyses/Geographic_overlap/All_data.csv", stringsAsFactors = FALSE)
 colnames(clade_data) <- make.names(colnames(clade_data))
 
 # --- 2. ECOLOGICAL CLASSIFICATION & FILTER STATUS ----------------------------
@@ -50,15 +50,17 @@ plot_diagnostic <- ggplot(clade_data, aes(x = Mean_Geographic_Overlap, y = gamma
   scale_color_manual(values = c("Marine"="#1f78b4", "Terrestrial"="#33a02c", 
                                 "Freshwater"="#ff7f00", "Parasite"="grey50")) +
   labs(
-    x = "Mean Geographic Overlap (Jaccard Index)", y = "Gamma Statistic (Raw)",
-    title = "Plot 0: Diagnostic Overview (All 20 Clades)",
-    subtitle = "Crosses indicate clades excluded due to parasite lifestyle or low statistical power",
-    shape = "Data Quality", color = "Environment", size = "Number of Tips"
+    x = "Mean Geographic Overlap (Jaccard Index)", y = "Gamma Statistic",
+    title = "Diagnostic Overview",
+    subtitle = "(Crosses indicate clades excluded due to parasite lifestyle or low statistical power)",
+    shape = "Data Quality",
+    color = "Environment",
+    size = "Number of Tips"
   ) +
-  theme_minimal() + theme(legend.position = "right")
+  theme_minimal() + 
+  theme(legend.position = "right")
 
 plot(plot_diagnostic)
-ggsave("PLOT_0_Diagnostic.png", plot = plot_diagnostic, width = 10, height = 7, dpi = 300, bg = "white")
 
 # --- 4. APPLY FILTERING & GLOBAL STATISTICS ----------------------------------
 clade_data_filtered <- clade_data %>% filter(Status == "Included")
@@ -78,12 +80,15 @@ plot_main_gamma <- ggplot(clade_data_filtered, aes(x = Mean_Geographic_Overlap, 
   scale_color_manual(values = c("Marine"="#1f78b4", "Terrestrial"="#33a02c", "Freshwater"="#ff7f00")) +
   annotate("text", x = max(clade_data_filtered$Mean_Geographic_Overlap)*0.75, y = max(clade_data_filtered$gamma)*0.9, 
            label = stats_gamma_text, size = 4, fontface = "italic", hjust = 0) +
-  labs(title = "Main Fig 1: Geographic Overlap vs Gamma", subtitle = "Testing the universal hypothesis (All valid clades aggregated)",
-       x = "Mean Geographic Overlap", y = "Gamma Statistic", size = "Number of Tips", color = "Environment") +
+  labs(title = "Geographic Overlap vs Gamma",
+       x = "Mean Geographic Overlap", 
+       y = "Gamma Statistic",
+       size = "Number of Tips",
+       color = "Environment") +
   theme_minimal()
 
 plot(plot_main_gamma)
-ggsave("PLOT_1_Main_Gamma.png", plot = plot_main_gamma, width = 8.5, height = 6, dpi = 300, bg = "white")
+
 
 # 5B: DeltaR
 plot_main_deltar <- ggplot(clade_data_filtered, aes(x = Mean_Geographic_Overlap, y = deltaR)) +
@@ -93,12 +98,14 @@ plot_main_deltar <- ggplot(clade_data_filtered, aes(x = Mean_Geographic_Overlap,
   scale_color_manual(values = c("Marine"="#1f78b4", "Terrestrial"="#33a02c", "Freshwater"="#ff7f00")) +
   annotate("text", x = max(clade_data_filtered$Mean_Geographic_Overlap)*0.75, y = max(clade_data_filtered$deltaR)*0.9, 
            label = stats_deltar_text, size = 4, fontface = "italic", hjust = 0) +
-  labs(title = "Main Fig 2: Geographic Overlap vs DeltaR", subtitle = "Testing the universal hypothesis (All valid clades aggregated)",
-       x = "Mean Geographic Overlap", y = "DeltaR", size = "Number of Tips", color = "Environment") +
+  labs(title = "Geographic Overlap vs DeltaR", 
+       x = "Mean Geographic Overlap", 
+       y = "DeltaR",
+       size = "Number of Tips",
+       color = "Environment") +
   theme_minimal()
 
 plot(plot_main_deltar)
-ggsave("PLOT_2_Main_DeltaR.png", plot = plot_main_deltar, width = 8.5, height = 6, dpi = 300, bg = "white")
 
 # --- 6. SUPPLEMENTARY PLOTS: FACETED BY ECOLOGY ------------------------------
 # We omit p-values here because the sample size per facet (N=3-5) is too small 
@@ -111,13 +118,15 @@ plot_supp_gamma <- ggplot(clade_data_filtered, aes(x = Mean_Geographic_Overlap, 
   geom_text_repel(aes(label = Clade_Name, color = Ecology), size = 3.5, fontface = "bold", show.legend = FALSE) +
   facet_wrap(~ Ecology, scales = "fixed") + # Fixed scales to highlight the different spatial domains
   scale_color_manual(values = c("Marine"="#1f78b4", "Terrestrial"="#33a02c", "Freshwater"="#ff7f00")) +
-  labs(title = "Supp Fig 1: Overlap vs Gamma by Environment", 
-       subtitle = "Highlighting the confounding effect of different dispersal capabilities (Vagility)",
-       x = "Mean Geographic Overlap", y = "Gamma Statistic", size = "Number of Tips") +
-  theme_bw(base_size = 14) + theme(legend.position = "none") # Legend hidden since facets are self-explanatory
+  labs(title = "Overlap vs Gamma by Environment", 
+       x = "Mean Geographic Overlap",
+       y = "Gamma Statistic", 
+       size = "Number of Tips") +
+  theme_bw(base_size = 14) + 
+  theme(legend.position = "none") # Legend hidden since facets are self-explanatory
 
 plot(plot_supp_gamma)
-ggsave("PLOT_3_Supplementary_Faceted_Gamma.png", plot = plot_supp_gamma, width = 10, height = 5, dpi = 300, bg = "white")
+
 
 # 6B: Faceted DeltaR
 plot_supp_deltar <- ggplot(clade_data_filtered, aes(x = Mean_Geographic_Overlap, y = deltaR)) +
@@ -126,15 +135,11 @@ plot_supp_deltar <- ggplot(clade_data_filtered, aes(x = Mean_Geographic_Overlap,
   geom_text_repel(aes(label = Clade_Name, color = Ecology), size = 3.5, fontface = "bold", show.legend = FALSE) +
   facet_wrap(~ Ecology, scales = "fixed") +
   scale_color_manual(values = c("Marine"="#1f78b4", "Terrestrial"="#33a02c", "Freshwater"="#ff7f00")) +
-  labs(title = "Supp Fig 2: Overlap vs DeltaR by Environment", 
-       subtitle = "Highlighting the confounding effect of different dispersal capabilities (Vagility)",
+  labs(title = "Overlap vs DeltaR by Environment", 
        x = "Mean Geographic Overlap", y = "DeltaR", size = "Number of Tips") +
   theme_bw(base_size = 14) + theme(legend.position = "none")
 
 plot(plot_supp_deltar)
-ggsave("PLOT_4_Supplementary_Faceted_DeltaR.png", plot = plot_supp_deltar, width = 10, height = 5, dpi = 300, bg = "white")
 
 # --- 7. EXPORT FINAL DATA ----------------------------------------------------
 write.csv(clade_data_filtered, "final_comparison_table.csv", row.names = FALSE)
-cat("\n--- Full Analytical Pipeline Complete ---\n")
-cat("Generated 5 Plots (1 Diagnostic, 2 Main, 2 Supplementary).\n")
