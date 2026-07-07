@@ -3,7 +3,7 @@
 # This script extracts terrestrial environmental variables (in particular Elevation, Temperature, and Precipitation) for a predefined list of animal clades.
 # It searches for coordinate files recursively, stacks global climate rasters, extracts values for each occurrence, and computes species-level averages.
 # It requires the csv files obtained by the 'geographic_coordinates_gbif.R' script. 
-# In this case only the terrestrial taxa distribution coordinates has to be considered 
+# In this case only the terrestrial taxa distribution coordinates has to be considered.
 
 
 library(terra)
