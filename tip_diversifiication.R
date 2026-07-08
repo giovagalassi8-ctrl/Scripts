@@ -6,14 +6,12 @@
 # generates comparative plots (violins and scatter plots).
 # It requires the csv file containing the environmental parameters obtained by 'terrestrial_environment_extraction.R' and 'marine_environment_extraction.R' scripts.
 
-
 library(ape)
 library(RPANDA)
 library(picante)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
-
 
 # Define the root directory path where the script will search for the phylogenetic tree files.
 TREE_FOLDER  <- "."
@@ -40,8 +38,7 @@ terr_env <- read.csv("Terrestrial_Environment.csv", stringsAsFactors = FALSE)
 comparison <- read.csv("final_comparison_table.csv", stringsAsFactors = FALSE)
 
 # Subset the 'Clade_Name' column keeping only the rows where the 'Status' column equals "Included".
-included_clades <- 1$Clade_Name[comparison$Status == "Included"]
-
+included_clades <- comparison$Clade_Name[comparison$Status == "Included"]
 
 # Define a function (get_tip_rates).
 get_tip_rates <- function(clade) {
@@ -124,7 +121,6 @@ summary_df <- merged %>%
 write.csv(summary_df, "clade_summary.csv", row.names = FALSE)
 print(summary_df)
 
-
 # Tip rate distributions per clade (Violin Plot).
 # Initialize a ggplot object using the 'merged' dataframe, mapping clade (reordered by median tip_rate) to x, tip_rate to y, and environment to fill color.
 p1 <- ggplot(merged, aes(x = reorder(clade, tip_rate, median), y = tip_rate, fill = environment)) +
@@ -140,7 +136,8 @@ p1 <- ggplot(merged, aes(x = reorder(clade, tip_rate, median), y = tip_rate, fil
        fill = "Environment") +
   # Apply a clean, minimalist theme to the plot.
   theme_minimal()
-
+# Save the plot.
+ggsave("tip_rate_distributions.pdf", p1, width = 9, height = 7)
 
 # Define a helper function (scatter_plot) to standardise the creation of correlation scatter plots
 scatter_plot <- function(df, xvar, yvar, xlab, title, point_col) {
@@ -156,9 +153,9 @@ scatter_plot <- function(df, xvar, yvar, xlab, title, point_col) {
     # Add points to the scatter plot.
     geom_point(aes(size = n_species),
                color = point_col) +
-    # Add a linear regression trendline.
+    # Add a linear regression trendline without the standard error shading.
     geom_smooth(method = "lm", 
-                se = TRUE,
+                se = FALSE,
                 color = "darkred",
                 linetype = "dashed") +
     # Add non-overlapping text labels to the points using ggrepel.
@@ -226,4 +223,7 @@ if (nrow(tmp) > 2) {
          size = "N species") +
     # Apply a clean, minimalist theme to the plot.
     theme_minimal()
+  
+  # Save the temperature plot.
+  ggsave("variance_vs_temperature.pdf", p4, width = 7, height = 5)
 }
