@@ -194,36 +194,33 @@ if (nrow(ter) > 2) ggsave("variance_vs_elevation.pdf",
                                        "Rate Heterogeneity vs Elevation - Terrestrial", "darkgreen"),
                           width = 7, height = 5)
 
-# Rate variance vs. Temperature (All clades).
+# Rate variance vs. Temperature (Marine and Terrestrial separated).
 # Correctly merges ocean bottom temperature with terrestrial air temperature.
 summary_df$temp_combined <- ifelse(!is.na(summary_df$mean_temp_bot),
                                    summary_df$mean_temp_bot,
                                    summary_df$mean_temp_terr)
+
 # Filter the summary dataframe to keep only rows with a valid combined temperature value.
 tmp <- filter(summary_df, !is.na(temp_combined))
-# Check if there are more than 2 valid clades left for the temperature analysis.
-if (nrow(tmp) > 2) {
-  # Creates the plot.
-  p4 <- ggplot(tmp, aes(x = temp_combined,
-                        y = tip_rate_var,
-                        color = Ecology,
-                        label = clade)) +
-    # Add points, mapping point size to the number of species.
-    geom_point(aes(size = n_species)) +
-    # Add linear trendlines for each ecology group without standard error shading.
-    geom_smooth(method = "lm",
-                se = FALSE,
-                linetype = "dashed") +
-    # Add non-overlapping text labels to the points.
-    geom_text_repel(size = 3) +
-    labs(x = "Mean Temperature (°C)",
-         y = "Variance of Tip Diversification Rates",
-         title = "Rate Heterogeneity vs Temperature",
-         color = "Environment",
-         size = "N species") +
-    # Apply a clean, minimalist theme to the plot.
-    theme_minimal()
-  
-  # Save the temperature plot.
-  ggsave("variance_vs_temperature.pdf", p4, width = 7, height = 5)
+
+# 1. Marine Temperature Plot
+# Subset the data for marine clades only.
+tmp_mar <- filter(tmp, Ecology == "Marine")
+# Check if there are more than 2 valid marine clades left for the temperature analysis.
+if (nrow(tmp_mar) > 2) {
+  ggsave("variance_vs_temperature_marine.pdf",
+         scatter_plot(tmp_mar, "temp_combined", "tip_rate_var", "Mean Temperature (°C)",
+                      "Rate Heterogeneity vs Temperature - Marine", "steelblue"),
+         width = 7, height = 5)
+}
+
+# 2. Terrestrial Temperature Plot
+# Subset the data for terrestrial clades only.
+tmp_ter <- filter(tmp, Ecology == "Terrestrial")
+# Check if there are more than 2 valid terrestrial clades left for the temperature analysis.
+if (nrow(tmp_ter) > 2) {
+  ggsave("variance_vs_temperature_terrestrial.pdf",
+         scatter_plot(tmp_ter, "temp_combined", "tip_rate_var", "Mean Temperature (°C)",
+                      "Rate Heterogeneity vs Temperature - Terrestrial", "darkgreen"),
+         width = 7, height = 5)
 }
