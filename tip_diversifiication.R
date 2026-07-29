@@ -1,14 +1,13 @@
 #!/usr/bin/env Rscript
 
 # This script synthesizes tip diversification rates for various animal clades.
-# It bypasses computationally heavy models by calculating the fast DR statistic using the 'picante' package.
+# It bypasses computationally heavy models by calculating the fast DR statistic using a custom function.
 # It then merges these evolutionary rates with the previously extracted marine and terrestrial environmental data, computes clade-level summaries, and 
 # generates comparative plots (violins and scatter plots).
 # It requires the csv file containing the environmental parameters obtained by 'terrestrial_environment_extraction.R' and 'marine_environment_extraction.R' scripts.
 
 library(ape)
 library(RPANDA)
-library(picante)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
@@ -18,16 +17,40 @@ TREE_FOLDER  <- "."
 # Define the minimum threshold of environmental occurrences required to retain a species in the final analysis.
 MIN_ENV_OCC  <- 5
 
-# Define a custom function ('tipDiversificationRate') that takes a phylogenetic 'tree' object as input.
-tipDiversificationRate <- function(tree) {
-  # Calculate the evolutionary distinctiveness (DR statistic) for each tip using the "equal.splits" method from 'picante'.
-  res <- picante::evol.distinct(tree, type = "equal.splits")
-  # Extract the numeric vector of calculated rates (the 'w' column from the result).
-  rates <- res$w
-  # Assign the species names (from the 'Species' column) as the names attribute of the 'rates' vector.
-  names(rates) <- res$Species
-  # Return the named numeric vector containing the tip diversification rates.
-  return(rates)
+# For each tip, sum branch lengths from tip to root weighted by 1/2^(k-1), where k is the number of steps from the tip. 
+# Returns values in units of diversification rate (events per Ma).
+# Define a custom function to calculate the Diversification Rate (DR) statistic for each tip in a phylogenetic tree.
+DR_statistic <- function(tree) {
+  # Extract the total number of tips in the tree.
+  n <- Ntip(tree)
+  # Initialize a numeric vector of length 'n' filled with zeros, and assign the species names to it.
+  DR <- setNames(numeric(n), tree$tip.label)
+  for (i in 1:n) {
+    # Start tracking from the current tip node.
+    node <- i
+    # Initialize the step counter 'k', representing the number of splitting events (nodes) from the tip.
+    k <- 1
+    # Initialize 'total' to accumulate the Evolutionary Distinctiveness (ED) value for the current tip.
+    total <- 0
+    # Traverse the tree backwards from the tip to the root.
+    # In 'ape' phylo objects, the root node is always exactly indexed as (n + 1).
+    while (node != (n + 1)) {
+      # Find the edge (branch) where the current node is the descendant (column 2 of the edge matrix).
+      edge_idx <- which(tree$edge[, 2] == node)
+      # If no edge is found, the traversal stops.
+      if (length(edge_idx) == 0) break
+      # Add the branch length divided by 2^(k-1). 
+      # This distributes the evolutionary time among all descendant lineages sharing this branch.
+      total <- total + tree$edge.length[edge_idx] / (2^(k - 1))
+      # Move up to the ancestor node (column 1 of the edge matrix) for the next iteration.
+      node <- tree$edge[edge_idx, 1]
+      # Increment the step counter as we move one node deeper into the past.
+      k <- k + 1
+    }
+    # Calculate the Diversification Rate (DR) by taking the inverse of the accumulated ED (total).
+    DR[i] <- 1 / total
+  }
+  return(DR)
 }
 
 # Read the marine environmental data CSV file into a dataframe.
@@ -57,9 +80,9 @@ get_tip_rates <- function(clade) {
   # Check if the tree is NOT ultrametric (tips don't align at time 0).
   if (!is.ultrametric(tree)) { cat("Not ultrametric:", clade, "\n"); return(NULL) }
   
-  # Using our custom function to compute rates instantly.
-  rates <- tryCatch(tipDiversificationRate(tree), 
-                    error = function(e) { cat("tipDiversificationRate error:", clade, "-", e$message, "\n"); NULL })
+  # Using our custom function to compute rates instantly (change with the correct function name).
+  rates <- tryCatch(DR_statistic(tree), 
+                    error = function(e) { cat("DiversificationRate error:", clade, "-", e$message, "\n"); NULL })
   # Check if 'rates' is NULL (meaning the calculation failed).
   if (is.null(rates)) return(NULL)
   # Create and return a new dataframe containing the extracted species, clade names, and their rates.
@@ -79,7 +102,7 @@ write.csv(all_rates, "tip_rates_all_clades.csv", row.names = FALSE)
 cat("Species with tip rates:", nrow(all_rates), "\n")
 
 # Merge with environmental data.
-# Add a new column named 'environment' to the marine and terrestrial dataframe and fill it with the setted string.
+# Add a new column named 'environment' to the marine and terrestrial dataframe and fill it with the specified string.
 marine_env$environment <- "Marine"
 terr_env$environment   <- "Terrestrial"
 # Row-bind the marine and terrestrial dataframes together, and keep only the rows where the number of environmental occurrences is greater than or equal to MIN_ENV_OCC.
@@ -131,7 +154,7 @@ p1 <- ggplot(merged, aes(x = reorder(clade, tip_rate, median), y = tip_rate, fil
   # Swap the x and y axes to make the long clade names readable horizontally.
   coord_flip() +
   labs(x = NULL,
-       y = "Tip Diversification Rate",
+       y = "Diversification Rates",
        title = "Tip Rate Distribution per Clade",
        fill = "Environment") +
   # Apply a clean, minimalist theme to the plot.
@@ -155,6 +178,7 @@ scatter_plot <- function(df, xvar, yvar, xlab, title, point_col) {
                color = point_col) +
     # Add a linear regression trendline without the standard error shading.
     geom_smooth(method = "lm", 
+                # Do not display confidence band around smooth (change with TRUE to display).
                 se = FALSE,
                 color = "darkred",
                 linetype = "dashed") +
