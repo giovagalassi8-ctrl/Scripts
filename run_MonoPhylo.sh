@@ -6,11 +6,11 @@
 # In this last file can be added columns also containing taxonomic groups such as superphyla, superfamilies, or any type of grouping desired.
 
 
-# Define the output directory.
+# Define the output directory (change accordingly).
 OUTDIR="OUTPUT_DIRECTORY_PATH"
-# Define the absolute path for the directory containing the trees and mapping file.
+# Define the absolute path for the directory containing the trees and mapping file (change accordingly).
 CHECKDIR="DIRECTORY_PATH"
-# Define the path for the final aggregated results file.
+# Define the path for the final aggregated results file (change accordingly).
 FINAL="$OUTDIR/FILE_NAME.TXT"
 # Define a temporary directory for each run's intermediate outputs.
 TMPDIR="$OUTDIR/tmp_run"
