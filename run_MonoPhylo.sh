@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 # This script performs a monophyly check using the Monophylo.py script. 
 # It must be launched inside a folder containing all the treefiles you want to analyze, 
