@@ -13,7 +13,7 @@ library(ggrepel)
 # Import a .csv file obtained by the 'geographic_coordinates_gbif.R' script.
 # This file is supposed to contain the following columns: species, decimalLatitude, decimalLongitude.
 # (Change with the correct name).
-coordinates <- read.csv("Carditidae_coordinates.csv", stringsAsFactors = FALSE)
+coordinates <- read.csv("COORDINATES.CSV", stringsAsFactors = FALSE)
 # Remove invalid coordinates.
 coordinates <- coordinates %>%
   filter(!is.na(decimalLatitude), !is.na(decimalLongitude),
@@ -71,7 +71,7 @@ overlap_table <- bind_rows(lapply(pairs, function(p) {
 }))
 
 # Save the final dataframe (change as necessary).
-write.csv(overlap_table, "Carditidae_pairwise_overlap.csv", row.names = FALSE)
+write.csv(overlap_table, "PAIRWISE_OVERLAP.CSV", row.names = FALSE)
 # Synthesize clade-level overlap.
 clade_overlap_mean <- mean(overlap_table$overlap_index, na.rm = TRUE)
 cat("\nMean overlap:", round(clade_overlap_mean, 3), "\n")
