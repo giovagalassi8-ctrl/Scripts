@@ -1,4 +1,4 @@
-# !/bin/env Rscript
+#!/bin/env Rscript
 
 # This script reads a CSV file containing the monophyly status and the support value for each taxonomic group of interest within the phylogenetic trees considered,
 # and creates an heatmap that allows you to visualize the monophyly of each group. On the x-axis of the graph every phylogenetic trees will be reported, while on
