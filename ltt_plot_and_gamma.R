@@ -12,7 +12,7 @@ library(ape)
 library(geiger)
 
 # Import the time-calibrated tree in Newick format (change with the correct name).
-tree <- read.tree("Carditidae.nwk")
+tree <- read.tree("TREEFILE.NWK")
 # Print the total number of tips (species) currently present in the tree.
 cat("Number of tips in the tree:", Ntip(tree), "\n")
 
@@ -173,5 +173,5 @@ summary_row <- data.frame(
 )
 
 # Export the summary row to a CSV file (change the file name as desired).
-write.csv(summary_row, "Carditidae_diversification_summary.csv", row.names = FALSE)
+write.csv(summary_row, "DIVERSIFICATION_SUMMARY.CSV", row.names = FALSE)
 print(summary_row)
