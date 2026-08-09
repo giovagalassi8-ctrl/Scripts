@@ -1,4 +1,4 @@
-#
+#!/usr/bin/env Rscript
 
 # This script prepare the binary trait data used for the SecSSE macroevolutionary analysis.
 # This script extracts species from a phylogenetic tree and matches them with environmental depth data.
