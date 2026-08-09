@@ -1,4 +1,4 @@
-# !/usr/bin/env/ Rscript
+#!/usr/bin/env/ Rscript
 
 # This script allows you to create a scatterplot to graphically represent the results of 'phykit toverr' (a text file containing the values of treeness/RCV, treeness, and RCV for each object).
 # In particular, the treeness (measure of the proportion of the total tree length (sum of all branch lengths) that is found on internal branches) is represented on the x-axis, 
