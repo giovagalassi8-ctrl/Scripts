@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-# This script extracts marine environmental variables ( in particular Bathymetry/Depth and Sea Bottom Temperature) for a predefined list of marine clades.
+# This script extracts marine environmental variables (in particular Bathymetry/Depth and Sea Bottom Temperature) for a predefined list of marine clades.
 # It automatically downloads global raster layers from Bio-ORACLE, extracts values for each species occurrence, and computes species-specific averages.
 # It requires the csv files obtained by the 'geographic_coordinates_gbif.R' script. 
 # In this case only the marine taxa distribution coordinates has to be considered.
