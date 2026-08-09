@@ -1,4 +1,4 @@
-# !/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 
 # This script downloads geographic occurrence records from the GBIF database, for a specific list of marine species.
 # It requires teh WORMS_TAXONOMY file obtained by the 'resolve_taxonomy_marine.R', from which it gather, 
