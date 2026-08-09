@@ -1,4 +1,4 @@
-# !/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 
 # This script takes the result of gotree analysis on monophyly (in csv format), like the file obtained with the 'monophyly_check_gotree.sh' script,
 # to create a costum heatmap where the various squares indicates whether the group is monophyletic or not.
