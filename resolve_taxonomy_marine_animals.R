@@ -1,4 +1,4 @@
-# !/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 
 # This script takes a phylogenetic tree (in Newick format) and looks up each species name in WoRMS and GBIF databases to find the currently accepted scientific name.
 # Sometimes the tip labels often use older names or synonyms that no longer match the name used in the database when the datas were added.
