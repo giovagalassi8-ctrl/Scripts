@@ -1,4 +1,4 @@
-# !/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 
 # This script extracts terrestrial environmental variables (in particular Elevation, Temperature, and Precipitation) for a predefined list of animal clades.
 # It searches for coordinate files recursively, stacks global climate rasters, extracts values for each occurrence, and computes species-level averages.
