@@ -17,7 +17,7 @@ tree_file <- "TREEFILE.NWK"
 # Definte the .csv file containing the data for the environmental parameter selected for the analysis.
 # It could be used the output file of the 'SecSSE_trait_data.R' script.
 trait_file <- "TRAIT_FILE.CSV"
-# Define the output file name
+# Define the output file name.
 output_file <- "OUTPUT_DATA_CHECK_FILE.CSV"
 
 # Define the estimated total number of accepted extant species.
