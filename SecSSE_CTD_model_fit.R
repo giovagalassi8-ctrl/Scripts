@@ -22,8 +22,8 @@ tree_file <- "TREEFILE.NWK"
 # It could be used the output file of the 'SecSSE_trait_data.R' script.
 trait_file <- "TRAIT_FILE.CSV"
 # Define the output files name: one in .rds format and the other in .csv format (so you can easily read it).
-rds_output_file <- "OUTPUT_CR_FIT.RDS"
-csv_output_file <- "OUTPUT_CR_RESULTS.CSV"
+rds_output_file <- "OUTPUT_CTD_FIT.RDS"
+csv_output_file <- "OUTPUT_CTD_RESULTS.CSV"
 
 # Define the estimated total number of accepted extant species.
 # To gain this number you can use online databases (e.g., WoRMS for marine species).
