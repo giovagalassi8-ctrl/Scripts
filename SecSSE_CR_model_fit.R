@@ -1,4 +1,4 @@
-# #!/usr/bin/env Rscript
+#!/usr/bin/env Rscript
 
 # This script fits a Constant Rates (CR) model using the SecSSE package to evaluate whether lineage diversification heterogeneity is linked to an environment parameter.
 # In this case depth is considered as the default parameter as in the previous scripts, but you can use any other condition.
