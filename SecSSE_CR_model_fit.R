@@ -18,7 +18,7 @@ library(secsse)
 tree_file <- "TREEFILE.NWK"
 # Definte the .csv file containing the data for the environmental parameter selected for the analysis.
 # It could be used the output file of the 'SecSSE_trait_data.R' script.
-trait_file <- "Conidae_depth_trait.csv"
+trait_file <- "TRAIT_FILE.CSV"
 # Define the output files name: one in .rds format and the other in .csv format (so you can easily read it).
 rds_output_file <- "OUTPUT_CR_FIT.RDS"
 csv_output_file <- "OUTPUT_CR_RESULTS.CSV"
