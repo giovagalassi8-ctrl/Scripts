@@ -23,6 +23,11 @@
 #   <clade>_dd_fits.rds        - raw model fits for this clade
 #   <clade>_dd_comparison.csv  - AIC comparison for this clade
 #   ALL_clades_comparison.csv  - combined table, updated after every run
+
+# Set the initial lamba value for the analysis (change accordingly).
+#initial_lambda <- 0.3
+# Set the initial mu value for the analysis (change accordingly).
+#initial_mu     <- 0.1
 # =============================================================================
 
 
@@ -44,11 +49,6 @@ KNOWN_SPECIES <- 1000
 DATA_ROOT <- "DATA_FOLDER_NAME"
 # Set the output directory name (change accordingly).
 output_dir     <- "OUTPUT_DIRECTORY_NAME"
-# Set the initial lamba value for the analysis (change accordingly).
-initial_lambda <- 0.3
-# Set the initial mu value for the analysis (change accordingly).
-initial_mu     <- 0.1
-
 
 # Create the output directory if it does not exixst.
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
@@ -76,23 +76,49 @@ if (inherits(tree, "multiPhylo")) tree <- tree[[1]]
 if (!is.ultrametric(tree))
   stop("Tree is not ultrametric - DDD requires an ultrametric tree.")
 
-
-n_tips      <- Ntip(tree)
+# Create an object containing the number of tips of the tree.
+n_tips <- Ntip(tree)
+# Calculate the number of missing species comparing the number of species in the tree with the number of accepted extant species settled before.
 missnumspec <- max(0, KNOWN_SPECIES - n_tips)
-brts        <- branching.times(tree)
+# Create an object containing the branching times of the tree.
+brts <- branching.times(tree)
+# Returns a summary of some tree's statistics as screen output. 
+# In particular, the ratio is returned: given the large ratio value, the script may take much longer, as it is more complex to manage the model (especially for values greater than 12).
+cat("Tips:", n_tips, "| Known species:", KNOWN_SPECIES, "| Missing:", missnumspec, "| Ratio:", round(missnumspec / n_tips, 1), "\n")
 
-cat("Tips:", n_tips, "| Known species:", KNOWN_SPECIES,
-    "| Missing:", missnumspec, "| Ratio:", round(missnumspec / n_tips, 1), "\n")
-
+# Check if the tree has more tips than the number of known species, and stop the proccess if necessary.
 if (n_tips > KNOWN_SPECIES)
-  warning("Tree has MORE tips than the stated known species count - check KNOWN_SPECIES.")
-
+  warning("Tree has MORE tips than the stated known species count.")
+# Check if the ratio is higher than 12 and in case it warns you that the process could require a lot of time.
 if (missnumspec / n_tips > 12)
   cat("WARNING: missing species greatly outnumber sampled tips.",
       "This fit may be slow and K poorly constrained.\n")
 
-# --- Fit the three models -----------------------------------------------------
+# --- Derive starting values from the tree itself ------------------------------
+# A fixed starting guess (e.g. lambda=0.3 for every clade) can fail on large
+# or fast-diversifying trees: the likelihood at that starting point can
+# underflow to -Inf, or the optimiser can wander into a degenerate loop
+# (as happened with Dugesiidae, 215 tips). Deriving starting values from the
+# tree itself keeps the optimiser in a plausible region for THIS clade's
+# actual scale, without changing what the true maximum likelihood is - it
+# only changes where the search begins.
+# Set the initial lamba value for the analysis (change accordingly).
+#initial_lambda <- 0.3
+# Set the initial mu value for the analysis (change accordingly).
+#initial_mu     <- 0.1
 
+tree_age       <- max(brts)
+initial_lambda <- log(n_tips) / tree_age
+# ^ rough net diversification rate estimate: ln(N tips) / crown age
+initial_mu     <- initial_lambda * 0.3
+# ^ extinction assumed at a fraction of speciation as a starting guess only
+
+cat("Derived starting values: lambda =", round(initial_lambda, 4),
+    "| mu =", round(initial_mu, 4), "\n")
+
+
+# Fit the three models
+#
 cond      <- 1                          # condition on clade survival
 initial_K <- (n_tips + missnumspec) * 2  # start K above total diversity
 
