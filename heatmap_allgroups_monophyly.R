@@ -25,7 +25,7 @@ df <- data[,c(1,2,5,6)]
 # In this case it is expected the following structure: "Prefix_NAME.treefile".
 df <- df |>
   mutate(tree_label = source_tree |>
-           # Remove the Prefix (change accordingly).
+           # Remove the Prefix (change accordingly, e.g. "ML_MS90_" for the MS90 supermatrix).
            gsub("rooted_ML_MS80_", "", x = _) |>
            # Remove the extension (change accordingly).
            gsub("\\.treefile", "", x = _))
@@ -71,19 +71,18 @@ df <- df |>
     # Set the elements on the x-axis based on the defined classification (in this case: allgenes, rcv and lb). 
     block = case_when(
       grepl("allgenes", tree_label) ~ 1,
-      grepl("rcv",      tree_label) ~ 2,
-      grepl("lb",       tree_label) ~ 3,
-      TRUE                          ~ 4
+      grepl("rcv", tree_label) ~ 2,
+      grepl("lb", tree_label) ~ 3,
+      TRUE ~ 4
     ),
     # Set the elements on the x-axis in alphabetical order accordingly to the previously created groups.
     # If you don't want this grouping, change with 'tree_label = factor(tree_label, levels = rev(unique(tree_label)' and ignore the 'block =' line.
     # If you want to order the matrices labels based on the number of monophyletic groups, change with 'tree_label = factor(tree_label, levels = mono_order$tree_label),' the next command line.
-    tree_label = factor(tree_label,
-                        levels = unique(tree_label[order(block, tree_label)])),
+    tree_label = factor(tree_label, levels = unique(tree_label[order(block, tree_label)])),
     
     # Set the elements on the y-axis based on the order previously defined.
-    Grouping   = factor(Grouping,
-                        levels = taxa_vector))
+    Grouping = factor(Grouping,
+                      levels = taxa_vector))
 
 
 # THERE ARE 2 TYPES OF POSSIBLE PLOTS:
