@@ -10,7 +10,7 @@
 library(ggplot2)
 library(dplyr)
 
-# Read the CSV file with the interest data (change with the correct .csv file name).
+# Read the CSV file obtained using MonoPhylo.py with the interest data (change with the correct .csv file name).
 data <- read.csv("INPUT_FILE", header = TRUE)
 
 # Filters the data while keeping only the columns of interest :
