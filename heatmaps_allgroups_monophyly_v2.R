@@ -225,6 +225,9 @@ d <- ggplot(df, aes(
     values = status_colours,
     drop = FALSE,
     name = NULL,
+    # Write the legend labels as expressions, so that the "≥" symbol is drawn correctly also by the standard pdf() device
+    # (with plain text, pdf() on Windows turns "≥" into "=").
+    labels = expression("Monophyletic (support" >= " 95)", "Monophyletic (support < 95)", "Non-monophyletic", "Not tested"),
     # Add a thin grey border around the legend keys, so that the white "Not tested" key is visible.
     guide = guide_legend(override.aes = list(color = "grey70"))
   ) +
